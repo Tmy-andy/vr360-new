@@ -49,20 +49,20 @@ const elements = {
 // ===== Category Titles =====
 const categoryTitles = {
     vi: {
-        hotels: 'Khách Sạn Phan Thiết',
-        attractions: 'Điểm Du Lịch',
-        heritage: 'Di Tích Lịch Sử',
-        scenery: 'Danh Thắng',
-        info: 'Thông Tin',
-        map: 'Bản Đồ'
+        hotels: 'DANH SÁCH KHÁCH SẠN TẠI PHAN THIẾT',
+        attractions: 'ĐIỂM DU LỊCH',
+        heritage: 'DI TÍCH LỊCH SỬ',
+        scenery: 'DANH THẮNG',
+        info: 'THÔNG TIN',
+        map: 'BẢN ĐỒ'
     },
     en: {
-        hotels: 'Phan Thiet Hotels',
-        attractions: 'Tourist Attractions',
-        heritage: 'Historical Sites',
-        scenery: 'Scenic Spots',
-        info: 'Information',
-        map: 'Map'
+        hotels: 'LIST OF HOTELS IN PHAN THIET',
+        attractions: 'TOURIST ATTRACTIONS',
+        heritage: 'HISTORICAL SITES',
+        scenery: 'SCENIC SPOTS',
+        info: 'INFORMATION',
+        map: 'MAP'
     }
 };
 
@@ -207,7 +207,9 @@ function createCard(item) {
             </div>
             <div class="card-content">
                 <h3 class="card-title">${title}</h3>
-                <p class="card-description">${description}</p>
+                <div class="card-description">
+                    <span class="card-description-text">${description}</span><span class="read-more" style="display: none;"></span>
+                </div>
                 ${rating || price ? `
                     <div class="card-footer">
                         ${rating ? `
@@ -251,6 +253,210 @@ function attachCardListeners() {
             handleCardClick(id);
         });
     });
+    
+    // Apply truncation logic for card descriptions
+    applyDescriptionTruncation();
+    
+    // Synchronize initial row heights
+    synchronizeRowHeights();
+}
+
+// ===== Synchronize Row Heights =====
+function synchronizeRowHeights() {
+    // Skip on mobile
+    if (window.innerWidth <= 480) return;
+    
+    const cards = Array.from(document.querySelectorAll('.content-card'));
+    if (cards.length === 0) return;
+    
+    // Reset all heights first
+    cards.forEach(card => card.style.height = '');
+    
+    // Group cards by row
+    const rows = {};
+    cards.forEach(card => {
+        const top = card.offsetTop;
+        if (!rows[top]) {
+            rows[top] = [];
+        }
+        rows[top].push(card);
+    });
+    
+    // Set equal height for each row
+    Object.values(rows).forEach(rowCards => {
+        let maxHeight = 0;
+        rowCards.forEach(card => {
+            const cardHeight = card.scrollHeight;
+            if (cardHeight > maxHeight) {
+                maxHeight = cardHeight;
+            }
+        });
+        
+        rowCards.forEach(card => {
+            card.style.height = maxHeight + 'px';
+        });
+    });
+}
+
+// ===== Apply Description Truncation Logic =====
+function applyDescriptionTruncation() {
+    const cards = document.querySelectorAll('.content-card');
+    const isMobile = window.innerWidth <= 480;
+    
+    cards.forEach(card => {
+        const title = card.querySelector('.card-title');
+        const descriptionEl = card.querySelector('.card-description');
+        const descriptionText = card.querySelector('.card-description-text');
+        const readMore = card.querySelector('.read-more');
+        
+        if (!title || !descriptionEl || !descriptionText || !readMore) return;
+        
+        // DON'T reset expanded state - keep it if it exists
+        const wasExpanded = descriptionEl.classList.contains('expanded');
+        
+        // On mobile, always use 2 lines
+        if (isMobile) {
+            if (!wasExpanded) {
+                descriptionText.style.webkitLineClamp = '2';
+            }
+            title.classList.remove('two-lines');
+        } else {
+            // Check if title is 2 lines on desktop/tablet
+            const titleLineHeight = parseFloat(getComputedStyle(title).lineHeight);
+            const titleHeight = title.scrollHeight;
+            const titleLines = Math.round(titleHeight / titleLineHeight);
+            
+            // Adjust description line clamp based on title lines (only if not expanded)
+            if (!wasExpanded) {
+                if (titleLines >= 2) {
+                    title.classList.add('two-lines');
+                    descriptionText.style.webkitLineClamp = '2';
+                } else {
+                    title.classList.remove('two-lines');
+                    descriptionText.style.webkitLineClamp = '3';
+                }
+            }
+        }
+        
+        // Wait for DOM update before checking truncation
+        setTimeout(() => {
+            // If already has click handler, skip
+            if (readMore.dataset.hasHandler === 'true') return;
+            
+            const descTextHeight = descriptionText.scrollHeight;
+            const descTextVisibleHeight = descriptionText.clientHeight;
+            
+            if (descTextHeight > descTextVisibleHeight || wasExpanded) {
+                descriptionEl.classList.add('truncated');
+                readMore.style.display = 'inline';
+                readMore.textContent = wasExpanded ? 'rút gọn' : 'xem thêm';
+                readMore.dataset.hasHandler = 'true';
+                
+                // Add click handler for "xem thêm" / "rút gọn"
+                readMore.onclick = (e) => {
+                    e.stopPropagation();
+                    
+                    const isExpanded = descriptionEl.classList.contains('expanded');
+                    
+                    if (isExpanded) {
+                        // Collapse
+                        descriptionEl.classList.remove('expanded');
+                        descriptionEl.classList.add('truncated');
+                        readMore.textContent = 'xem thêm';
+                        // Reset row height after collapse animation
+                        setTimeout(() => resetRowHeight(card), 50);
+                    } else {
+                        // Expand
+                        descriptionEl.classList.add('expanded');
+                        descriptionEl.classList.remove('truncated');
+                        readMore.textContent = 'rút gọn';
+                        // Adjust row height after expand animation
+                        setTimeout(() => adjustRowHeight(card), 50);
+                    }
+                };
+            } else {
+                descriptionEl.classList.remove('truncated');
+                readMore.style.display = 'none';
+            }
+        }, 50);
+    });
+}
+
+// ===== Get Cards in Same Row =====
+function getCardsInSameRow(targetCard) {
+    const allCards = Array.from(document.querySelectorAll('.content-card'));
+    const targetTop = targetCard.offsetTop;
+    
+    // Find all cards with the same offsetTop (same row)
+    return allCards.filter(card => Math.abs(card.offsetTop - targetTop) < 5);
+}
+
+// ===== Adjust Row Height =====
+function adjustRowHeight(expandedCard) {
+    // Get all cards in the same row
+    const rowCards = getCardsInSameRow(expandedCard);
+    
+    // Remove inline height first to get natural height
+    rowCards.forEach(card => {
+        card.style.height = '';
+    });
+    
+    // Wait a bit for the description to expand
+    setTimeout(() => {
+        // Find the tallest card in the row
+        let maxHeight = 0;
+        rowCards.forEach(card => {
+            const cardHeight = card.scrollHeight;
+            if (cardHeight > maxHeight) {
+                maxHeight = cardHeight;
+            }
+        });
+        
+        // Set all cards in the row to the same height
+        rowCards.forEach(card => {
+            card.style.height = maxHeight + 'px';
+        });
+    }, 100);
+}
+
+// ===== Reset Row Height =====
+function resetRowHeight(collapsedCard) {
+    // Get all cards in the same row
+    const rowCards = getCardsInSameRow(collapsedCard);
+    
+    // Wait for collapse animation to complete
+    setTimeout(() => {
+        // Check if any card in the row is still expanded
+        const hasExpandedCard = rowCards.some(card => {
+            const desc = card.querySelector('.card-description');
+            return desc && desc.classList.contains('expanded');
+        });
+        
+        if (!hasExpandedCard) {
+            // Remove inline height to recalculate natural heights
+            rowCards.forEach(card => {
+                card.style.height = '';
+            });
+            
+            // Wait for DOM to update, then synchronize heights
+            setTimeout(() => {
+                let maxHeight = 0;
+                rowCards.forEach(card => {
+                    const cardHeight = card.scrollHeight;
+                    if (cardHeight > maxHeight) {
+                        maxHeight = cardHeight;
+                    }
+                });
+                
+                rowCards.forEach(card => {
+                    card.style.height = maxHeight + 'px';
+                });
+            }, 50);
+        } else {
+            // Recalculate height if there are still expanded cards
+            adjustRowHeight(collapsedCard);
+        }
+    }, 100);
 }
 
 // ===== Card Click Handler =====
@@ -409,6 +615,9 @@ function debounce(func, wait) {
 
 // Optimize search with debouncing
 elements.searchInput.addEventListener('input', debounce(handleSearch, 300));
+
+// Re-apply truncation on window resize
+window.addEventListener('resize', debounce(applyDescriptionTruncation, 200));
 
 // ===== Start Application =====
 document.addEventListener('DOMContentLoaded', init);
