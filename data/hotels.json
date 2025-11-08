@@ -1,0 +1,312 @@
+{
+  "hotels": [
+    {
+      "id": "hotel-001",
+      "name": {
+        "vi": "Rock Water Bay",
+        "en": "Rock Water Bay"
+      },
+      "description": {
+        "vi": "Resort sang trọng với view biển tuyệt đẹp, nằm ngay trên bãi biển Mũi Né. Phòng ốc hiện đại, dịch vụ 5 sao.",
+        "en": "Luxury resort with stunning sea views, located right on Mui Ne beach. Modern rooms, 5-star service."
+      },
+      "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
+      "rating": 4.8,
+      "price": 2500000,
+      "coordinates": { "lat": 10.9333, "lng": 108.1000 }
+    },
+    {
+      "id": "hotel-002",
+      "name": {
+        "vi": "Nova World Phan Thiết",
+        "en": "Nova World Phan Thiet"
+      },
+      "description": {
+        "vi": "Khu nghỉ dưỡng phức hợp lớn nhất Phan Thiết với công viên giải trí, bãi biển riêng và sân golf 36 lỗ.",
+        "en": "The largest integrated resort in Phan Thiet with amusement park, private beach and 36-hole golf course."
+      },
+      "image": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800",
+      "rating": 4.6,
+      "price": 3200000,
+      "coordinates": { "lat": 10.9500, "lng": 108.1200 }
+    },
+    {
+      "id": "hotel-003",
+      "name": {
+        "vi": "Mövenpick Phan Thiết",
+        "en": "Mövenpick Phan Thiet"
+      },
+      "description": {
+        "vi": "Khách sạn 5 sao quốc tế với kiến trúc Địa Trung Hải, hồ bơi vô cực và nhà hàng hải sản cao cấp.",
+        "en": "5-star international hotel with Mediterranean architecture, infinity pool and premium seafood restaurant."
+      },
+      "image": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800",
+      "rating": 4.7,
+      "price": 2800000,
+      "coordinates": { "lat": 10.9200, "lng": 108.0950 }
+    },
+    {
+      "id": "hotel-004",
+      "name": {
+        "vi": "Phú Hải Beach Resort",
+        "en": "Phu Hai Beach Resort"
+      },
+      "description": {
+        "vi": "Resort ven biển yên tĩnh với bungalow riêng biệt, spa truyền thống và bãi biển hoang sơ.",
+        "en": "Peaceful beachfront resort with private bungalows, traditional spa and pristine beach."
+      },
+      "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800",
+      "rating": 4.5,
+      "price": 1800000,
+      "coordinates": { "lat": 10.9100, "lng": 108.0900 }
+    },
+    {
+      "id": "hotel-005",
+      "name": {
+        "vi": "Anantara Mũi Né Resort",
+        "en": "Anantara Mui Ne Resort"
+      },
+      "description": {
+        "vi": "Resort hạng sang với thiết kế villa riêng tư, spa đẳng cấp thế giới và ẩm thực Á - Âu tinh tế.",
+        "en": "Luxury resort with private villa design, world-class spa and exquisite Asian-European cuisine."
+      },
+      "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+      "rating": 4.9,
+      "price": 4500000,
+      "coordinates": { "lat": 10.9400, "lng": 108.1100 }
+    },
+    {
+      "id": "hotel-006",
+      "name": {
+        "vi": "Pandanus Resort",
+        "en": "Pandanus Resort"
+      },
+      "description": {
+        "vi": "Khách sạn boutique ấm cúng với phong cách nhiệt đới, bể bơi xanh mát và view vườn tuyệt đẹp.",
+        "en": "Cozy boutique hotel with tropical style, refreshing pool and beautiful garden views."
+      },
+      "image": "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=800",
+      "rating": 4.4,
+      "price": 1500000,
+      "coordinates": { "lat": 10.9250, "lng": 108.1050 }
+    },
+    {
+      "id": "hotel-007",
+      "name": {
+        "vi": "The Cliff Resort & Residences",
+        "en": "The Cliff Resort & Residences"
+      },
+      "description": {
+        "vi": "Resort cao cấp nằm trên vách đá với view biển 180 độ, hồ bơi dát vàng và dịch vụ butler riêng.",
+        "en": "Premium resort perched on cliff with 180-degree sea view, gold-plated pool and private butler service."
+      },
+      "image": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800",
+      "rating": 4.8,
+      "price": 3800000,
+      "coordinates": { "lat": 10.9350, "lng": 108.1150 }
+    },
+    {
+      "id": "hotel-008",
+      "name": {
+        "vi": "Victoria Phan Thiết Beach Resort & Spa",
+        "en": "Victoria Phan Thiet Beach Resort & Spa"
+      },
+      "description": {
+        "vi": "Resort theo phong cách làng chài Việt Nam truyền thống, sát biển với các hoạt động thể thao nước.",
+        "en": "Resort styled as traditional Vietnamese fishing village, beachfront with water sports activities."
+      },
+      "image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800",
+      "rating": 4.6,
+      "price": 2200000,
+      "coordinates": { "lat": 10.9180, "lng": 108.0980 }
+    }
+  ],
+  "attractions": [
+    {
+      "id": "attr-001",
+      "name": {
+        "vi": "Bãi Biển Mũi Né",
+        "en": "Mui Ne Beach"
+      },
+      "description": {
+        "vi": "Bãi biển tuyệt đẹp với cát trắng mịn, nước biển trong xanh. Điểm đến lý tưởng cho lướt ván diều.",
+        "en": "Beautiful beach with fine white sand and crystal clear water. Ideal destination for kitesurfing."
+      },
+      "image": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800",
+      "rating": 4.7,
+      "coordinates": { "lat": 10.9333, "lng": 108.1000 }
+    },
+    {
+      "id": "attr-002",
+      "name": {
+        "vi": "Đồi Cát Bay (Bàu Trắng)",
+        "en": "White Sand Dunes"
+      },
+      "description": {
+        "vi": "Cảnh quan sa mạc độc đáo với những đồi cát trắng mịn, nơi lý tưởng để ngắm hoàng hôn.",
+        "en": "Unique desert landscape with smooth white sand dunes, perfect spot for sunset viewing."
+      },
+      "image": "https://images.unsplash.com/photo-1509233725247-49e657c54213?w=800",
+      "rating": 4.8,
+      "coordinates": { "lat": 10.9800, "lng": 108.1500 }
+    },
+    {
+      "id": "attr-003",
+      "name": {
+        "vi": "Đồi Cát Hồng",
+        "en": "Red Sand Dunes"
+      },
+      "description": {
+        "vi": "Đồi cát đỏ nổi tiếng với hoạt động trượt cát và cảnh hoàng hôn tuyệt đẹp trên biển.",
+        "en": "Famous red sand dunes with sandboarding activities and stunning sunset views over the sea."
+      },
+      "image": "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=800",
+      "rating": 4.6,
+      "coordinates": { "lat": 10.9500, "lng": 108.1300 }
+    },
+    {
+      "id": "attr-004",
+      "name": {
+        "vi": "Suối Tiên (Fairy Stream)",
+        "en": "Fairy Stream"
+      },
+      "description": {
+        "vi": "Con suối nhỏ chảy qua những vách đá sa thạch đỏ và trắng kỳ ảo, trải nghiệm đi bộ độc đáo.",
+        "en": "Small stream flowing through magical red and white sandstone cliffs, unique walking experience."
+      },
+      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+      "rating": 4.5,
+      "coordinates": { "lat": 10.9200, "lng": 108.1100 }
+    },
+    {
+      "id": "attr-005",
+      "name": {
+        "vi": "Hòn Rơm",
+        "en": "Hon Rom Beach"
+      },
+      "description": {
+        "vi": "Bãi biển hoang sơ với làn nước trong vắt, ít khách du lịch, lý tưởng cho nghỉ dưỡng yên tĩnh.",
+        "en": "Pristine beach with crystal clear water, few tourists, ideal for peaceful relaxation."
+      },
+      "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800",
+      "rating": 4.7,
+      "coordinates": { "lat": 10.8800, "lng": 108.0600 }
+    }
+  ],
+  "heritage": [
+    {
+      "id": "heri-001",
+      "name": {
+        "vi": "Tháp Chàm Poshanu",
+        "en": "Poshanu Cham Tower"
+      },
+      "description": {
+        "vi": "Quần thể tháp Chăm cổ được xây dựng vào thế kỷ 8-9, là di tích kiến trúc Chăm Pa quan trọng.",
+        "en": "Ancient Cham tower complex built in 8th-9th century, important Champa architectural heritage."
+      },
+      "image": "https://images.unsplash.com/photo-1548013146-72479768bada?w=800",
+      "rating": 4.4,
+      "coordinates": { "lat": 10.9600, "lng": 108.1200 }
+    },
+    {
+      "id": "heri-002",
+      "name": {
+        "vi": "Dinh Thầy Thím",
+        "en": "Thay Thim Palace"
+      },
+      "description": {
+        "vi": "Ngôi dinh thờ chúa công Trịnh Hoài Đức, kiến trúc độc đáo kết hợp phương Đông và phương Tây.",
+        "en": "Palace worshiping Lord Trinh Hoai Duc, unique architecture combining Eastern and Western styles."
+      },
+      "image": "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800",
+      "rating": 4.3,
+      "coordinates": { "lat": 10.9400, "lng": 108.1000 }
+    },
+    {
+      "id": "heri-003",
+      "name": {
+        "vi": "Nhà Thờ Đồi Thủy Sản",
+        "en": "Seafood Hill Church"
+      },
+      "description": {
+        "vi": "Nhà thờ Công giáo cổ kính với kiến trúc Gothic, điểm đến văn hóa tâm linh độc đáo.",
+        "en": "Ancient Catholic church with Gothic architecture, unique spiritual cultural destination."
+      },
+      "image": "https://images.unsplash.com/photo-1519817914152-22d216bb9170?w=800",
+      "rating": 4.2,
+      "coordinates": { "lat": 10.9300, "lng": 108.1050 }
+    }
+  ],
+  "scenery": [
+    {
+      "id": "scen-001",
+      "name": {
+        "vi": "Bãi Đá Ông Địa",
+        "en": "Ong Dia Rock Beach"
+      },
+      "description": {
+        "vi": "Bãi đá tự nhiên độc đáo với hình thù kỳ lạ, điểm chụp ảnh đẹp nổi tiếng ở Phan Thiết.",
+        "en": "Unique natural rock beach with strange shapes, famous beautiful photography spot in Phan Thiet."
+      },
+      "image": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800",
+      "rating": 4.6,
+      "coordinates": { "lat": 10.9100, "lng": 108.0850 }
+    },
+    {
+      "id": "scen-002",
+      "name": {
+        "vi": "Hồ Bàu Sen",
+        "en": "Bau Sen Lake"
+      },
+      "description": {
+        "vi": "Hồ nước ngọt yên bình giữa đồi cát, nơi cư trú của nhiều loài chim và sinh vật hoang dã.",
+        "en": "Peaceful freshwater lake amid sand dunes, home to many bird species and wildlife."
+      },
+      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+      "rating": 4.5,
+      "coordinates": { "lat": 10.9700, "lng": 108.1400 }
+    },
+    {
+      "id": "scen-003",
+      "name": {
+        "vi": "Núi Tà Cú",
+        "en": "Ta Cu Mountain"
+      },
+      "description": {
+        "vi": "Núi thiêng với tượng Phật nằm dài 49m, đi cáp treo ngắm cảnh toàn Phan Thiết từ trên cao.",
+        "en": "Sacred mountain with 49m long reclining Buddha statue, cable car ride with panoramic Phan Thiet views."
+      },
+      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+      "rating": 4.8,
+      "coordinates": { "lat": 10.7800, "lng": 107.9200 }
+    }
+  ],
+  "info": [
+    {
+      "id": "info-001",
+      "name": {
+        "vi": "Giới Thiệu Phan Thiết",
+        "en": "About Phan Thiet"
+      },
+      "description": {
+        "vi": "Phan Thiết - thành phố biển xinh đẹp của tỉnh Bình Thuận, nổi tiếng với bãi biển Mũi Né và đồi cát.",
+        "en": "Phan Thiet - beautiful coastal city of Binh Thuan province, famous for Mui Ne beach and sand dunes."
+      },
+      "image": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800",
+      "rating": 5.0
+    },
+    {
+      "id": "info-002",
+      "name": {
+        "vi": "Hướng Dẫn Du Lịch",
+        "en": "Travel Guide"
+      },
+      "description": {
+        "vi": "Thông tin chi tiết về lịch trình, phương tiện, thời tiết và các lưu ý khi du lịch Phan Thiết.",
+        "en": "Detailed information about itinerary, transportation, weather and travel tips for Phan Thiet."
+      },
+      "image": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800",
+      "rating": 4.9
+    }
+  ]
+}
