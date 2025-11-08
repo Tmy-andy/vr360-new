@@ -173,16 +173,16 @@ body {
 /* ===== Content Panel ===== */
 .content-panel {
     position: fixed;
-    left: 70px;
+    right: 0;  /* Changed from left to right */
     top: 0;
-    width: 420px;
+    width: 66.666%;  /* 2/3 of screen */
     height: 100vh;
-    background: var(--panel-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: var(--shadow-lg);
+    background: rgba(255, 255, 255, 0.95);  /* More transparent */
+    backdrop-filter: blur(30px);  /* Strong blur effect */
+    -webkit-backdrop-filter: blur(30px);
+    box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);  /* Shadow on left */
     z-index: 999;
-    transform: translateX(-100%);
+    transform: translateX(100%);  /* Hide to the right */
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
@@ -292,29 +292,31 @@ body {
 /* ===== Content Cards ===== */
 .content-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));  /* 3-4 columns */
+    gap: 25px;
+    padding: 10px;
 }
 
 .content-card {
     background: white;
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: var(--transition);
     cursor: pointer;
     border: 2px solid transparent;
+    height: fit-content;
 }
 
 .content-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
     border-color: var(--primary-color);
 }
 
 .card-image {
     width: 100%;
-    height: 200px;
+    height: 220px;
     object-fit: cover;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
@@ -341,25 +343,30 @@ body {
 }
 
 .card-content {
-    padding: 15px;
+    padding: 20px;
 }
 
 .card-title {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     color: var(--text-primary);
     line-height: 1.4;
-}
-
-.card-description {
-    font-size: 13px;
-    color: var(--text-secondary);
-    line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.card-description {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 15px;
 }
 
 .card-footer {
@@ -375,13 +382,14 @@ body {
     display: flex;
     align-items: center;
     gap: 5px;
-    font-size: 13px;
+    font-size: 14px;
     color: var(--accent-color);
+    font-weight: 600;
 }
 
 .card-price {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 700;
     color: var(--primary-color);
 }
 
@@ -507,7 +515,108 @@ body {
     to { transform: rotate(360deg); }
 }
 
+/* ===== VR Loading Indicator ===== */
+.vr-loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: white;
+    padding: 25px 40px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.vr-loading .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.vr-loading span {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* ===== VR Notification ===== */
+.vr-notification {
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(33, 150, 243, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    animation: slideInDown 0.3s ease-out;
+}
+
+.vr-notification.fade-out {
+    animation: slideOutUp 0.3s ease-out;
+    opacity: 0;
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateX(-50%) translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutUp {
+    from {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-50%) translateY(-50px);
+        opacity: 0;
+    }
+}
+
 /* ===== Responsive Design ===== */
+@media (max-width: 1400px) {
+    .content-panel {
+        width: 75%;  /* 3/4 on smaller desktops */
+    }
+    
+    .content-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 1024px) {
+    .content-panel {
+        width: 85%;  /* Wider on tablets */
+    }
+    
+    .content-grid {
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        gap: 20px;
+    }
+}
+
 @media (max-width: 768px) {
     .sidebar {
         width: 60px;
@@ -534,9 +643,17 @@ body {
     }
     
     .content-panel {
-        left: 60px;
-        width: calc(100% - 60px);
-        max-width: 380px;
+        width: calc(100% - 60px);  /* Full width minus sidebar */
+        max-width: none;
+    }
+    
+    .content-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .card-image {
+        height: 180px;
     }
     
     .action-buttons {
@@ -562,8 +679,7 @@ body {
 
 @media (max-width: 480px) {
     .content-panel {
-        width: calc(100% - 60px);
-        max-width: none;
+        width: 100%;  /* Full screen on mobile */
     }
     
     .panel-header {
@@ -582,8 +698,13 @@ body {
         padding: 15px;
     }
     
+    .content-grid {
+        grid-template-columns: 1fr;  /* Single column on phone */
+        gap: 15px;
+    }
+    
     .card-image {
-        height: 160px;
+        height: 200px;
     }
     
     .action-buttons {
