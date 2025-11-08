@@ -13,7 +13,11 @@
       "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
       "rating": 4.8,
       "price": 2500000,
-      "coordinates": { "lat": 10.9333, "lng": 108.1000 }
+      "coordinates": { "lat": 10.9333, "lng": 108.1000 },
+      "panoramaUrl": "https://pannellum.org/images/alma.jpg",
+      "pitch": 0,
+      "yaw": 0,
+      "hfov": 100
     },
     {
       "id": "hotel-002",
@@ -28,7 +32,11 @@
       "image": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800",
       "rating": 4.6,
       "price": 3200000,
-      "coordinates": { "lat": 10.9500, "lng": 108.1200 }
+      "coordinates": { "lat": 10.9500, "lng": 108.1200 },
+      "panoramaUrl": "https://pannellum.org/images/bma-0.jpg",
+      "pitch": 0,
+      "yaw": 0,
+      "hfov": 100
     },
     {
       "id": "hotel-003",
@@ -43,7 +51,11 @@
       "image": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800",
       "rating": 4.7,
       "price": 2800000,
-      "coordinates": { "lat": 10.9200, "lng": 108.0950 }
+      "coordinates": { "lat": 10.9200, "lng": 108.0950 },
+      "panoramaUrl": "https://pannellum.org/images/jfk.jpg",
+      "pitch": 0,
+      "yaw": 0,
+      "hfov": 100
     },
     {
       "id": "hotel-004",
@@ -58,7 +70,11 @@
       "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800",
       "rating": 4.5,
       "price": 1800000,
-      "coordinates": { "lat": 10.9100, "lng": 108.0900 }
+      "coordinates": { "lat": 10.9100, "lng": 108.0900 },
+      "panoramaUrl": "https://pannellum.org/images/cerro-toco-0.jpg",
+      "pitch": -10,
+      "yaw": 180,
+      "hfov": 110
     },
     {
       "id": "hotel-005",
@@ -73,7 +89,11 @@
       "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
       "rating": 4.9,
       "price": 4500000,
-      "coordinates": { "lat": 10.9400, "lng": 108.1100 }
+      "coordinates": { "lat": 10.9400, "lng": 108.1100 },
+      "panoramaUrl": "https://pannellum.org/images/from-tree.jpg",
+      "pitch": 5,
+      "yaw": 90,
+      "hfov": 100
     },
     {
       "id": "hotel-006",
@@ -88,7 +108,11 @@
       "image": "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=800",
       "rating": 4.4,
       "price": 1500000,
-      "coordinates": { "lat": 10.9250, "lng": 108.1050 }
+      "coordinates": { "lat": 10.9250, "lng": 108.1050 },
+      "panoramaUrl": "https://pannellum.org/images/alma.jpg",
+      "pitch": 0,
+      "yaw": 45,
+      "hfov": 100
     },
     {
       "id": "hotel-007",
@@ -103,7 +127,11 @@
       "image": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800",
       "rating": 4.8,
       "price": 3800000,
-      "coordinates": { "lat": 10.9350, "lng": 108.1150 }
+      "coordinates": { "lat": 10.9350, "lng": 108.1150 },
+      "panoramaUrl": "https://pannellum.org/images/bma-0.jpg",
+      "pitch": -5,
+      "yaw": 270,
+      "hfov": 110
     },
     {
       "id": "hotel-008",
@@ -118,7 +146,11 @@
       "image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800",
       "rating": 4.6,
       "price": 2200000,
-      "coordinates": { "lat": 10.9180, "lng": 108.0980 }
+      "coordinates": { "lat": 10.9180, "lng": 108.0980 },
+      "panoramaUrl": "https://pannellum.org/images/jfk.jpg",
+      "pitch": 0,
+      "yaw": 135,
+      "hfov": 100
     }
   ],
   "attractions": [
@@ -134,7 +166,11 @@
       },
       "image": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800",
       "rating": 4.7,
-      "coordinates": { "lat": 10.9333, "lng": 108.1000 }
+      "coordinates": { "lat": 10.9333, "lng": 108.1000 },
+      "panoramaUrl": "https://pannellum.org/images/from-tree.jpg",
+      "pitch": 0,
+      "yaw": 0,
+      "hfov": 110
     },
     {
       "id": "attr-002",
@@ -148,7 +184,11 @@
       },
       "image": "https://images.unsplash.com/photo-1509233725247-49e657c54213?w=800",
       "rating": 4.8,
-      "coordinates": { "lat": 10.9800, "lng": 108.1500 }
+      "coordinates": { "lat": 10.9800, "lng": 108.1500 },
+      "panoramaUrl": "https://pannellum.org/images/cerro-toco-0.jpg",
+      "pitch": -5,
+      "yaw": 180,
+      "hfov": 120
     },
     {
       "id": "attr-003",
@@ -162,7 +202,11 @@
       },
       "image": "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=800",
       "rating": 4.6,
-      "coordinates": { "lat": 10.9500, "lng": 108.1300 }
+      "coordinates": { "lat": 10.9500, "lng": 108.1300 },
+      "panoramaUrl": "https://pannellum.org/images/cerro-toco-0.jpg",
+      "pitch": 0,
+      "yaw": 90,
+      "hfov": 110
     },
     {
       "id": "attr-004",
@@ -176,7 +220,11 @@
       },
       "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
       "rating": 4.5,
-      "coordinates": { "lat": 10.9200, "lng": 108.1100 }
+      "coordinates": { "lat": 10.9200, "lng": 108.1100 },
+      "panoramaUrl": "https://pannellum.org/images/alma.jpg",
+      "pitch": 5,
+      "yaw": 45,
+      "hfov": 100
     },
     {
       "id": "attr-005",
@@ -190,7 +238,11 @@
       },
       "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800",
       "rating": 4.7,
-      "coordinates": { "lat": 10.8800, "lng": 108.0600 }
+      "coordinates": { "lat": 10.8800, "lng": 108.0600 },
+      "panoramaUrl": "https://pannellum.org/images/bma-0.jpg",
+      "pitch": 0,
+      "yaw": 270,
+      "hfov": 110
     }
   ],
   "heritage": [

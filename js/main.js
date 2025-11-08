@@ -3,8 +3,37 @@ const state = {
     currentCategory: 'hotels',
     data: null,
     filteredData: null,
-    currentLanguage: 'vi'
+    currentLanguage: 'vi',
+    vrViewer: null
 };
+
+// ===== VR360 Viewer Initialization =====
+function initVRViewer() {
+    try {
+        // Initialize Pannellum VR viewer
+        state.vrViewer = pannellum.viewer('panorama', {
+            type: 'equirectangular',
+            // Sample panorama - thay bằng ảnh 360 thực tế của bạn
+            panorama: 'https://pannellum.org/images/alma.jpg',
+            autoLoad: true,
+            autoRotate: -2, // Tự động xoay chậm
+            showControls: true,
+            showFullscreenCtrl: true,
+            showZoomCtrl: true,
+            mouseZoom: true,
+            compass: true,
+            hfov: 100, // Field of view
+            pitch: 0,
+            yaw: 0,
+            minHfov: 50,
+            maxHfov: 120
+        });
+        
+        console.log('VR360 viewer initialized successfully');
+    } catch (error) {
+        console.error('Error initializing VR viewer:', error);
+    }
+}
 
 // ===== DOM Elements =====
 const elements = {
@@ -40,6 +69,9 @@ const categoryTitles = {
 // ===== Initialize App =====
 async function init() {
     try {
+        // Initialize VR viewer first
+        initVRViewer();
+        
         showLoading();
         await loadData();
         setupEventListeners();
@@ -226,11 +258,41 @@ function handleCardClick(id) {
     const item = state.filteredData.find(item => item.id === id);
     if (item) {
         console.log('Card clicked:', item);
-        // Here you would typically:
-        // 1. Navigate to VR view
-        // 2. Load 360 panorama
-        // 3. Show detailed information
-        alert(`Navigating to: ${item.name.vi}\nThis would load the VR view in production.`);
+        
+        // Close the panel to show VR view
+        closePanel();
+        
+        // Load VR panorama if available
+        if (state.vrViewer && item.panoramaUrl) {
+            loadVRPanorama(item);
+        } else {
+            // Fallback if no panorama URL
+            console.log('No panorama URL for this location');
+            // You can show a message or use default panorama
+        }
+    }
+}
+
+// ===== Load VR Panorama =====
+function loadVRPanorama(item) {
+    try {
+        if (!state.vrViewer) {
+            console.error('VR viewer not initialized');
+            return;
+        }
+        
+        // Load new panorama
+        state.vrViewer.loadScene(item.id, {
+            type: 'equirectangular',
+            panorama: item.panoramaUrl,
+            pitch: item.pitch || 0,
+            yaw: item.yaw || 0,
+            hfov: item.hfov || 100
+        });
+        
+        console.log(`Loaded panorama for: ${item.name.vi}`);
+    } catch (error) {
+        console.error('Error loading panorama:', error);
     }
 }
 

@@ -39,11 +39,25 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.vr-background img {
+/* Pannellum specific styles */
+#panorama {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    opacity: 0.9;
+}
+
+/* Hide Pannellum hotspot tooltip if not needed */
+.pnlm-tooltip {
+    z-index: 500 !important;
+}
+
+/* Pannellum controls styling */
+.pnlm-controls {
+    z-index: 100 !important;
+}
+
+/* Make sure VR is behind UI elements */
+.pnlm-container {
+    z-index: 0 !important;
 }
 
 /* ===== Left Sidebar ===== */
