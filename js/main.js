@@ -122,14 +122,22 @@ document.addEventListener('MSFullscreenChange', handleFullscreenChange);
 
 function handleFullscreenChange() {
     const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const expandIcon = document.querySelector('.fullscreen-expand-icon');
+    const compressIcon = document.querySelector('.fullscreen-compress-icon');
     const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || 
                             document.mozFullScreenElement || document.msFullscreenElement);
     
     if (fullscreenBtn) {
         if (isFullscreen) {
             fullscreenBtn.classList.add('active');
+            // Show compress icon, hide expand icon
+            if (expandIcon) expandIcon.style.display = 'none';
+            if (compressIcon) compressIcon.style.display = 'block';
         } else {
             fullscreenBtn.classList.remove('active');
+            // Show expand icon, hide compress icon
+            if (expandIcon) expandIcon.style.display = 'block';
+            if (compressIcon) compressIcon.style.display = 'none';
         }
     }
 }
@@ -179,12 +187,6 @@ function setupEventListeners() {
     const fullscreenBtn = document.getElementById('fullscreenBtn');
     if (fullscreenBtn) {
         fullscreenBtn.addEventListener('click', toggleFullscreen);
-    }
-    
-    // Exit fullscreen button (mobile/tablet)
-    const exitFullscreenBtn = document.getElementById('exitFullscreenBtn');
-    if (exitFullscreenBtn) {
-        exitFullscreenBtn.addEventListener('click', exitFullscreen);
     }
 
     // Search input

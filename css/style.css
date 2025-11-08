@@ -70,12 +70,34 @@ body {
     display: none !important;
 }
 
+.pnlm-zoom-controls {
+    display: none !important;
+}
+
 /* Position Pannellum controls container */
 .pnlm-controls-container {
     right: 10px !important;
     bottom: 0 !important;
     top: auto !important;
     left: auto !important;
+}
+
+/* Hide Pannellum controls in fullscreen */
+:fullscreen .pnlm-controls-container,
+:-webkit-full-screen .pnlm-controls-container,
+:-moz-full-screen .pnlm-controls-container,
+:-ms-fullscreen .pnlm-controls-container,
+:fullscreen .pnlm-zoom-controls,
+:-webkit-full-screen .pnlm-zoom-controls,
+:-moz-full-screen .pnlm-zoom-controls,
+:-ms-fullscreen .pnlm-zoom-controls,
+:fullscreen .pnlm-controls,
+:-webkit-full-screen .pnlm-controls,
+:-moz-full-screen .pnlm-controls,
+:-ms-fullscreen .pnlm-controls {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
 }
 
 /* Make sure VR is behind UI elements */
@@ -509,6 +531,14 @@ body {
     z-index: 998;
 }
 
+/* Increase z-index in fullscreen to ensure visibility */
+:fullscreen .action-buttons,
+:-webkit-full-screen .action-buttons,
+:-moz-full-screen .action-buttons,
+:-ms-fullscreen .action-buttons {
+    z-index: 2147483647 !important; /* Max z-index value */
+}
+
 .action-btn {
     width: 50px;
     height: 50px;
@@ -544,77 +574,42 @@ body {
     color: var(--text-light);
 }
 
-/* Hide fullscreen button when in fullscreen mode */
-:fullscreen .action-buttons,
-:-webkit-full-screen .action-buttons,
-:-moz-full-screen .action-buttons,
-:-ms-fullscreen .action-buttons {
+/* Fullscreen icons toggle */
+.fullscreen-expand-icon,
+.fullscreen-compress-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* In fullscreen mode: keep action-buttons visible but hide individual buttons except fullscreen */
+:fullscreen .action-buttons .action-btn:not(#fullscreenBtn),
+:-webkit-full-screen .action-buttons .action-btn:not(#fullscreenBtn),
+:-moz-full-screen .action-buttons .action-btn:not(#fullscreenBtn),
+:-ms-fullscreen .action-buttons .action-btn:not(#fullscreenBtn) {
+    display: none !important;
+}
+
+/* Ensure fullscreen button stays visible */
+:fullscreen #fullscreenBtn,
+:-webkit-full-screen #fullscreenBtn,
+:-moz-full-screen #fullscreenBtn,
+:-ms-fullscreen #fullscreenBtn {
+    display: flex !important;
+}
+
+/* Hide sidebar and language toggle in fullscreen */
+:fullscreen .sidebar,
+:-webkit-full-screen .sidebar,
+:-moz-full-screen .sidebar,
+:-ms-fullscreen .sidebar,
+:fullscreen .language-toggle,
+:-webkit-full-screen .language-toggle,
+:-moz-full-screen .language-toggle,
+:-ms-fullscreen .language-toggle {
     display: none;
 }
 
-/* ===== Exit Fullscreen Button (Mobile/Tablet) ===== */
-.exit-fullscreen-btn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: white;
-    z-index: 10000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.exit-fullscreen-btn:hover {
-    background: rgba(255, 0, 0, 0.8);
-    border-color: rgba(255, 255, 255, 0.5);
-    transform: scale(1.1);
-}
-
-.exit-fullscreen-btn:active {
-    transform: scale(0.95);
-}
-
-.exit-fullscreen-btn svg {
-    width: 28px;
-    height: 28px;
-}
-
-/* Show exit button when fullscreen on mobile/tablet */
-@media (max-width: 1024px) {
-    :fullscreen .exit-fullscreen-btn,
-    :-webkit-full-screen .exit-fullscreen-btn,
-    :-moz-full-screen .exit-fullscreen-btn,
-    :-ms-fullscreen .exit-fullscreen-btn {
-        display: flex !important;
-    }
-    
-    /* Hide language toggle in fullscreen on mobile */
-    :fullscreen .language-toggle,
-    :-webkit-full-screen .language-toggle,
-    :-moz-full-screen .language-toggle,
-    :-ms-fullscreen .language-toggle {
-        display: none;
-    }
-    
-    /* Hide sidebar in fullscreen on mobile */
-    :fullscreen .sidebar,
-    :-webkit-full-screen .sidebar,
-    :-moz-full-screen .sidebar,
-    :-ms-fullscreen .sidebar {
-        display: none;
-    }
-}
-
+/* ===== Language Toggle ===== */
 /* ===== Language Toggle ===== */
 .language-toggle {
     position: fixed;
