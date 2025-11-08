@@ -8,12 +8,26 @@
     <!-- Pannellum VR Viewer -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
     <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+
+    <style>
+        .pnlm-container .pnlm-controls-container {
+            right: 10px !important;
+            bottom: 0 !important;
+        }
+    </style>
     
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <!-- Background VR360 -->
     <div class="vr-background" id="panorama"></div>
+
+    <!-- Exit Fullscreen Button (Mobile/Tablet only) -->
+    <button class="exit-fullscreen-btn" id="exitFullscreenBtn" style="display: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+    </button>
 
     <!-- Left Sidebar Menu -->
     <aside class="sidebar">
@@ -127,7 +141,7 @@
             </svg>
         </button>
         
-        <button class="action-btn" title="Toàn màn hình">
+        <button class="action-btn" id="fullscreenBtn" title="Toàn màn hình">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
             </svg>

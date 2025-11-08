@@ -66,6 +66,74 @@ const categoryTitles = {
     }
 };
 
+// ===== Toggle Fullscreen =====
+function toggleFullscreen() {
+    const panoramaContainer = document.getElementById('panorama');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    
+    if (!document.fullscreenElement && !document.webkitFullscreenElement && 
+        !document.mozFullScreenElement && !document.msFullscreenElement) {
+        // Enter fullscreen
+        if (panoramaContainer.requestFullscreen) {
+            panoramaContainer.requestFullscreen();
+        } else if (panoramaContainer.webkitRequestFullscreen) {
+            panoramaContainer.webkitRequestFullscreen();
+        } else if (panoramaContainer.mozRequestFullScreen) {
+            panoramaContainer.mozRequestFullScreen();
+        } else if (panoramaContainer.msRequestFullscreen) {
+            panoramaContainer.msRequestFullscreen();
+        }
+        
+        // Add active class
+        if (fullscreenBtn) {
+            fullscreenBtn.classList.add('active');
+        }
+    } else {
+        exitFullscreen();
+    }
+}
+
+// ===== Exit Fullscreen =====
+function exitFullscreen() {
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    
+    // Exit fullscreen
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+    
+    // Remove active class
+    if (fullscreenBtn) {
+        fullscreenBtn.classList.remove('active');
+    }
+}
+
+// Listen for fullscreen changes
+document.addEventListener('fullscreenchange', handleFullscreenChange);
+document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+function handleFullscreenChange() {
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || 
+                            document.mozFullScreenElement || document.msFullscreenElement);
+    
+    if (fullscreenBtn) {
+        if (isFullscreen) {
+            fullscreenBtn.classList.add('active');
+        } else {
+            fullscreenBtn.classList.remove('active');
+        }
+    }
+}
+
 // ===== Initialize App =====
 async function init() {
     try {
@@ -106,6 +174,18 @@ function setupEventListeners() {
 
     // Close panel
     elements.closePanel.addEventListener('click', closePanel);
+
+    // Fullscreen button
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    if (fullscreenBtn) {
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+    }
+    
+    // Exit fullscreen button (mobile/tablet)
+    const exitFullscreenBtn = document.getElementById('exitFullscreenBtn');
+    if (exitFullscreenBtn) {
+        exitFullscreenBtn.addEventListener('click', exitFullscreen);
+    }
 
     // Search input
     elements.searchInput.addEventListener('input', handleSearch);
@@ -630,3 +710,4 @@ window.VR360App = {
     closePanel,
     changeLanguage
 };
+

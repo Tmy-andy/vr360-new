@@ -65,6 +65,19 @@ body {
     z-index: 100 !important;
 }
 
+/* Hide Pannellum default fullscreen button */
+.pnlm-fullscreen-toggle-button {
+    display: none !important;
+}
+
+/* Position Pannellum controls container */
+.pnlm-controls-container {
+    right: 10px !important;
+    bottom: 0 !important;
+    top: auto !important;
+    left: auto !important;
+}
+
 /* Make sure VR is behind UI elements */
 .pnlm-container {
     z-index: 0 !important;
@@ -77,20 +90,16 @@ body {
     top: 0;
     width: 70px;
     height: 100vh;
-    background: var(--sidebar-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    /* background: var(--sidebar-bg); */
+    /* backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px); */
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px 0;
     z-index: 1000;
-    box-shadow: var(--shadow);
+    /* box-shadow: var(--shadow); */
     transition: var(--transition);
-}
-
-.sidebar:hover {
-    width: 75px;
 }
 
 .logo {
@@ -527,6 +536,83 @@ body {
 .action-btn svg {
     width: 24px;
     height: 24px;
+}
+
+/* Fullscreen button active state */
+#fullscreenBtn.active {
+    background: var(--primary-color);
+    color: var(--text-light);
+}
+
+/* Hide fullscreen button when in fullscreen mode */
+:fullscreen .action-buttons,
+:-webkit-full-screen .action-buttons,
+:-moz-full-screen .action-buttons,
+:-ms-fullscreen .action-buttons {
+    display: none;
+}
+
+/* ===== Exit Fullscreen Button (Mobile/Tablet) ===== */
+.exit-fullscreen-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    z-index: 10000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.exit-fullscreen-btn:hover {
+    background: rgba(255, 0, 0, 0.8);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+.exit-fullscreen-btn:active {
+    transform: scale(0.95);
+}
+
+.exit-fullscreen-btn svg {
+    width: 28px;
+    height: 28px;
+}
+
+/* Show exit button when fullscreen on mobile/tablet */
+@media (max-width: 1024px) {
+    :fullscreen .exit-fullscreen-btn,
+    :-webkit-full-screen .exit-fullscreen-btn,
+    :-moz-full-screen .exit-fullscreen-btn,
+    :-ms-fullscreen .exit-fullscreen-btn {
+        display: flex !important;
+    }
+    
+    /* Hide language toggle in fullscreen on mobile */
+    :fullscreen .language-toggle,
+    :-webkit-full-screen .language-toggle,
+    :-moz-full-screen .language-toggle,
+    :-ms-fullscreen .language-toggle {
+        display: none;
+    }
+    
+    /* Hide sidebar in fullscreen on mobile */
+    :fullscreen .sidebar,
+    :-webkit-full-screen .sidebar,
+    :-moz-full-screen .sidebar,
+    :-ms-fullscreen .sidebar {
+        display: none;
+    }
 }
 
 /* ===== Language Toggle ===== */
