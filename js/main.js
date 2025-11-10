@@ -46,6 +46,10 @@ const elements = {
     langBtns: document.querySelectorAll('.lang-btn')
 };
 
+// ===== Map Modal Elements =====
+const mapModal = document.getElementById('mapModal');
+const closeMapModalBtn = document.getElementById('closeMapModal');
+
 // ===== Category Titles =====
 const categoryTitles = {
     vi: {
@@ -214,14 +218,58 @@ function setupEventListeners() {
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && elements.contentPanel.classList.contains('active')) {
-            closePanel();
+        if (e.key === 'Escape') {
+            if (mapModal && mapModal.classList.contains('active')) {
+                closeMapModal();
+            } else if (elements.contentPanel.classList.contains('active')) {
+                closePanel();
+            }
         }
     });
+
+    // Map modal close button
+    if (closeMapModalBtn) {
+        closeMapModalBtn.addEventListener('click', closeMapModal);
+    }
+    
+    // Close map modal when clicking outside
+    if (mapModal) {
+        mapModal.addEventListener('click', (e) => {
+            if (e.target === mapModal) {
+                closeMapModal();
+            }
+        });
+    }
 }
 
 // ===== Navigation Click Handler =====
 function handleNavClick(category) {
+    // Xử lý đặc biệt cho nút "map"
+    if (category === 'map') {
+        openMapModal();
+        // Update active state for map button
+        elements.navItems.forEach(item => {
+            item.classList.remove('active');
+            if (item.dataset.category === 'map') {
+                item.classList.add('active');
+            }
+        });
+        return;
+    }
+    
+    // Kiểm tra nếu click vào nút đang active
+    const clickedButton = Array.from(elements.navItems).find(
+        item => item.dataset.category === category
+    );
+    
+    if (clickedButton && clickedButton.classList.contains('active') && 
+        elements.contentPanel.classList.contains('active')) {
+        // Click lần 2 vào nút đang active -> đóng panel
+        closePanel();
+        clickedButton.classList.remove('active');
+        return;
+    }
+    
     // Update active state
     elements.navItems.forEach(item => {
         item.classList.remove('active');
@@ -700,6 +748,33 @@ elements.searchInput.addEventListener('input', debounce(handleSearch, 300));
 
 // Re-apply truncation on window resize
 window.addEventListener('resize', debounce(applyDescriptionTruncation, 200));
+
+// ===== Map Modal Functions =====
+function openMapModal() {
+    if (mapModal) {
+        mapModal.classList.add('active');
+        // Close content panel if open
+        closePanel();
+        // Remove active from other buttons
+        elements.navItems.forEach(item => {
+            if (item.dataset.category !== 'map') {
+                item.classList.remove('active');
+            }
+        });
+    }
+}
+
+function closeMapModal() {
+    if (mapModal) {
+        mapModal.classList.remove('active');
+        // Remove active state from map button
+        elements.navItems.forEach(item => {
+            if (item.dataset.category === 'map') {
+                item.classList.remove('active');
+            }
+        });
+    }
+}
 
 // ===== Start Application =====
 document.addEventListener('DOMContentLoaded', init);
