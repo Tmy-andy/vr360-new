@@ -13,13 +13,13 @@ function initVRViewer() {
         // Initialize Pannellum VR viewer
         state.vrViewer = pannellum.viewer('panorama', {
             type: 'equirectangular',
-            // Sample panorama - thay bằng ảnh 360 thực tế của bạn
+            // Sample panorama - replace with your actual 360 image
             panorama: 'https://pannellum.org/images/alma.jpg',
             autoLoad: true,
-            autoRotate: -2, // Tự động xoay chậm
-            showControls: true,
-            showFullscreenCtrl: true,
-            showZoomCtrl: true,
+            autoRotate: -2, // Auto rotate slowly
+            showControls: false,
+            showFullscreenCtrl: false,
+            showZoomCtrl: false,
             mouseZoom: true,
             compass: true,
             hfov: 100, // Field of view
@@ -28,7 +28,7 @@ function initVRViewer() {
             minHfov: 50,
             maxHfov: 120
         });
-        
+
         console.log('VR360 viewer initialized successfully');
     } catch (error) {
         console.error('Error initializing VR viewer:', error);
@@ -49,6 +49,11 @@ const elements = {
 // ===== Map Modal Elements =====
 const mapModal = document.getElementById('mapModal');
 const closeMapModalBtn = document.getElementById('closeMapModal');
+
+// ===== Action Buttons Elements =====
+const actionButtons = document.getElementById('actionButtons');
+const toggleButtonsBtn = document.getElementById('toggleButtonsBtn');
+const fullscreenBtn = document.getElementById('fullscreenBtn');
 
 // ===== Category Titles =====
 const categoryTitles = {
@@ -72,76 +77,56 @@ const categoryTitles = {
 
 // ===== Toggle Fullscreen =====
 function toggleFullscreen() {
-    const panoramaContainer = document.getElementById('panorama');
-    const fullscreenBtn = document.getElementById('fullscreenBtn');
-    
-    if (!document.fullscreenElement && !document.webkitFullscreenElement && 
+    // Fullscreen the entire document instead of just the panorama
+    // This ensures all UI elements remain visible
+    const fullscreenElement = document.documentElement;
+
+    if (!document.fullscreenElement && !document.webkitFullscreenElement &&
         !document.mozFullScreenElement && !document.msFullscreenElement) {
         // Enter fullscreen
-        if (panoramaContainer.requestFullscreen) {
-            panoramaContainer.requestFullscreen();
-        } else if (panoramaContainer.webkitRequestFullscreen) {
-            panoramaContainer.webkitRequestFullscreen();
-        } else if (panoramaContainer.mozRequestFullScreen) {
-            panoramaContainer.mozRequestFullScreen();
-        } else if (panoramaContainer.msRequestFullscreen) {
-            panoramaContainer.msRequestFullscreen();
-        }
-        
-        // Add active class
-        if (fullscreenBtn) {
-            fullscreenBtn.classList.add('active');
+        if (fullscreenElement.requestFullscreen) {
+            fullscreenElement.requestFullscreen();
+        } else if (fullscreenElement.webkitRequestFullscreen) {
+            fullscreenElement.webkitRequestFullscreen();
+        } else if (fullscreenElement.mozRequestFullScreen) {
+            fullscreenElement.mozRequestFullScreen();
+        } else if (fullscreenElement.msRequestFullscreen) {
+            fullscreenElement.msRequestFullscreen();
         }
     } else {
-        exitFullscreen();
+        // Exit fullscreen
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
     }
 }
 
-// ===== Exit Fullscreen =====
-function exitFullscreen() {
-    const fullscreenBtn = document.getElementById('fullscreenBtn');
-    
-    // Exit fullscreen
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-    } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-    }
-    
-    // Remove active class
-    if (fullscreenBtn) {
-        fullscreenBtn.classList.remove('active');
-    }
-}
-
-// Listen for fullscreen changes
-document.addEventListener('fullscreenchange', handleFullscreenChange);
-document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-document.addEventListener('mozfullscreenchange', handleFullscreenChange);
-document.addEventListener('MSFullscreenChange', handleFullscreenChange);
-
+// ===== Handle Fullscreen Change =====
 function handleFullscreenChange() {
-    const fullscreenBtn = document.getElementById('fullscreenBtn');
     const expandIcon = document.querySelector('.fullscreen-expand-icon');
     const compressIcon = document.querySelector('.fullscreen-compress-icon');
-    const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || 
-                            document.mozFullScreenElement || document.msFullscreenElement);
-    
+    const isFullscreen = !!(document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement);
+
     if (fullscreenBtn) {
         if (isFullscreen) {
-            fullscreenBtn.classList.add('active');
-            // Show compress icon, hide expand icon
+            // In fullscreen - show compress icon
             if (expandIcon) expandIcon.style.display = 'none';
             if (compressIcon) compressIcon.style.display = 'block';
+            fullscreenBtn.setAttribute('title', 'Thu nhỏ');
         } else {
-            fullscreenBtn.classList.remove('active');
-            // Show expand icon, hide compress icon
+            // Not fullscreen - show expand icon
             if (expandIcon) expandIcon.style.display = 'block';
             if (compressIcon) compressIcon.style.display = 'none';
+            fullscreenBtn.setAttribute('title', 'Toàn màn hình');
         }
     }
 }
@@ -151,7 +136,7 @@ async function init() {
     try {
         // Initialize VR viewer first
         initVRViewer();
-        
+
         showLoading();
         await loadData();
         setupEventListeners();
@@ -188,10 +173,15 @@ function setupEventListeners() {
     elements.closePanel.addEventListener('click', closePanel);
 
     // Fullscreen button
-    const fullscreenBtn = document.getElementById('fullscreenBtn');
     if (fullscreenBtn) {
         fullscreenBtn.addEventListener('click', toggleFullscreen);
     }
+
+    // Fullscreen change events
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
 
     // Search input
     elements.searchInput.addEventListener('input', handleSearch);
@@ -208,7 +198,7 @@ function setupEventListeners() {
     document.addEventListener('click', (e) => {
         if (elements.contentPanel.classList.contains('active')) {
             const clickedOutside = !elements.contentPanel.contains(e.target) &&
-                                 !e.target.closest('.nav-item[data-category]');
+                !e.target.closest('.nav-item[data-category]');
             if (clickedOutside && !e.target.closest('.action-btn')) {
                 // Uncomment below to enable close on outside click
                 // closePanel();
@@ -231,7 +221,7 @@ function setupEventListeners() {
     if (closeMapModalBtn) {
         closeMapModalBtn.addEventListener('click', closeMapModal);
     }
-    
+
     // Close map modal when clicking outside
     if (mapModal) {
         mapModal.addEventListener('click', (e) => {
@@ -240,11 +230,19 @@ function setupEventListeners() {
             }
         });
     }
+
+    // Toggle action buttons
+    if (toggleButtonsBtn) {
+        toggleButtonsBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent event bubbling
+            toggleActionButtons();
+        });
+    }
 }
 
 // ===== Navigation Click Handler =====
 function handleNavClick(category) {
-    // Xử lý đặc biệt cho nút "map"
+    // Special handling for "map" button
     if (category === 'map') {
         openMapModal();
         // Update active state for map button
@@ -256,20 +254,20 @@ function handleNavClick(category) {
         });
         return;
     }
-    
-    // Kiểm tra nếu click vào nút đang active
+
+    // Check if clicking on already active button
     const clickedButton = Array.from(elements.navItems).find(
         item => item.dataset.category === category
     );
-    
-    if (clickedButton && clickedButton.classList.contains('active') && 
+
+    if (clickedButton && clickedButton.classList.contains('active') &&
         elements.contentPanel.classList.contains('active')) {
-        // Click lần 2 vào nút đang active -> đóng panel
+        // Second click on active button -> close panel
         closePanel();
         clickedButton.classList.remove('active');
         return;
     }
-    
+
     // Update active state
     elements.navItems.forEach(item => {
         item.classList.remove('active');
@@ -287,13 +285,13 @@ function handleNavClick(category) {
 function loadCategory(category) {
     state.currentCategory = category;
     state.filteredData = state.data[category] || [];
-    
+
     // Update panel title
     elements.panelTitle.textContent = categoryTitles[state.currentLanguage][category] || category;
-    
+
     // Clear search
     elements.searchInput.value = '';
-    
+
     // Render content
     renderContent();
 }
@@ -301,7 +299,7 @@ function loadCategory(category) {
 // ===== Render Content =====
 function renderContent() {
     const data = state.filteredData;
-    
+
     if (!data || data.length === 0) {
         showEmptyState();
         return;
@@ -312,9 +310,9 @@ function renderContent() {
             ${data.map(item => createCard(item)).join('')}
         </div>
     `;
-    
+
     elements.panelContent.innerHTML = html;
-    
+
     // Add click listeners to cards
     attachCardListeners();
 }
@@ -326,14 +324,14 @@ function createCard(item) {
     const description = item.description[lang] || item.description.vi;
     const rating = item.rating || 0;
     const price = item.price ? formatPrice(item.price, lang) : '';
-    
+
     return `
         <div class="content-card" data-id="${item.id}">
             <div class="card-image">
-                ${item.image ? 
-                    `<img src="${item.image}" alt="${title}" onerror="this.parentElement.innerHTML='<span class=\\'card-placeholder\\'>📷</span>'">` :
-                    `<span class="card-placeholder">📷</span>`
-                }
+                ${item.image ?
+            `<img src="${item.image}" alt="${title}" onerror="this.parentElement.innerHTML='<span class=\\'card-placeholder\\'><i class=\\"fas fa-camera\\"></i></span>'">` :
+            `<span class="card-placeholder"><i class="fas fa-camera"></i></span>`
+        }
             </div>
             <div class="card-content">
                 <h3 class="card-title">${title}</h3>
@@ -344,7 +342,7 @@ function createCard(item) {
                     <div class="card-footer">
                         ${rating ? `
                             <div class="card-rating">
-                                <span>⭐</span>
+                                <span><i class="fas fa-star"></i></span>
                                 <span>${rating.toFixed(1)}</span>
                             </div>
                         ` : '<div></div>'}
@@ -359,15 +357,15 @@ function createCard(item) {
 // ===== Format Price =====
 function formatPrice(price, lang) {
     if (lang === 'vi') {
-        return new Intl.NumberFormat('vi-VN', { 
-            style: 'currency', 
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
             currency: 'VND',
             maximumFractionDigits: 0
         }).format(price);
     } else {
         const usdPrice = price / 24000; // Approximate conversion
-        return new Intl.NumberFormat('en-US', { 
-            style: 'currency', 
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
             currency: 'USD',
             maximumFractionDigits: 0
         }).format(usdPrice);
@@ -383,10 +381,10 @@ function attachCardListeners() {
             handleCardClick(id);
         });
     });
-    
+
     // Apply truncation logic for card descriptions
     applyDescriptionTruncation();
-    
+
     // Synchronize initial row heights
     synchronizeRowHeights();
 }
@@ -395,13 +393,13 @@ function attachCardListeners() {
 function synchronizeRowHeights() {
     // Skip on mobile
     if (window.innerWidth <= 480) return;
-    
+
     const cards = Array.from(document.querySelectorAll('.content-card'));
     if (cards.length === 0) return;
-    
+
     // Reset all heights first
     cards.forEach(card => card.style.height = '');
-    
+
     // Group cards by row
     const rows = {};
     cards.forEach(card => {
@@ -411,7 +409,7 @@ function synchronizeRowHeights() {
         }
         rows[top].push(card);
     });
-    
+
     // Set equal height for each row
     Object.values(rows).forEach(rowCards => {
         let maxHeight = 0;
@@ -421,7 +419,7 @@ function synchronizeRowHeights() {
                 maxHeight = cardHeight;
             }
         });
-        
+
         rowCards.forEach(card => {
             card.style.height = maxHeight + 'px';
         });
@@ -432,18 +430,18 @@ function synchronizeRowHeights() {
 function applyDescriptionTruncation() {
     const cards = document.querySelectorAll('.content-card');
     const isMobile = window.innerWidth <= 480;
-    
+
     cards.forEach(card => {
         const title = card.querySelector('.card-title');
         const descriptionEl = card.querySelector('.card-description');
         const descriptionText = card.querySelector('.card-description-text');
         const readMore = card.querySelector('.read-more');
-        
+
         if (!title || !descriptionEl || !descriptionText || !readMore) return;
-        
+
         // DON'T reset expanded state - keep it if it exists
         const wasExpanded = descriptionEl.classList.contains('expanded');
-        
+
         // On mobile, always use 2 lines
         if (isMobile) {
             if (!wasExpanded) {
@@ -455,7 +453,7 @@ function applyDescriptionTruncation() {
             const titleLineHeight = parseFloat(getComputedStyle(title).lineHeight);
             const titleHeight = title.scrollHeight;
             const titleLines = Math.round(titleHeight / titleLineHeight);
-            
+
             // Adjust description line clamp based on title lines (only if not expanded)
             if (!wasExpanded) {
                 if (titleLines >= 2) {
@@ -467,27 +465,27 @@ function applyDescriptionTruncation() {
                 }
             }
         }
-        
+
         // Wait for DOM update before checking truncation
         setTimeout(() => {
             // If already has click handler, skip
             if (readMore.dataset.hasHandler === 'true') return;
-            
+
             const descTextHeight = descriptionText.scrollHeight;
             const descTextVisibleHeight = descriptionText.clientHeight;
-            
+
             if (descTextHeight > descTextVisibleHeight || wasExpanded) {
                 descriptionEl.classList.add('truncated');
                 readMore.style.display = 'inline';
                 readMore.textContent = wasExpanded ? 'rút gọn' : 'xem thêm';
                 readMore.dataset.hasHandler = 'true';
-                
-                // Add click handler for "xem thêm" / "rút gọn"
+
+                // Add click handler for "read more" / "collapse"
                 readMore.onclick = (e) => {
                     e.stopPropagation();
-                    
+
                     const isExpanded = descriptionEl.classList.contains('expanded');
-                    
+
                     if (isExpanded) {
                         // Collapse
                         descriptionEl.classList.remove('expanded');
@@ -516,7 +514,7 @@ function applyDescriptionTruncation() {
 function getCardsInSameRow(targetCard) {
     const allCards = Array.from(document.querySelectorAll('.content-card'));
     const targetTop = targetCard.offsetTop;
-    
+
     // Find all cards with the same offsetTop (same row)
     return allCards.filter(card => Math.abs(card.offsetTop - targetTop) < 5);
 }
@@ -525,12 +523,12 @@ function getCardsInSameRow(targetCard) {
 function adjustRowHeight(expandedCard) {
     // Get all cards in the same row
     const rowCards = getCardsInSameRow(expandedCard);
-    
+
     // Remove inline height first to get natural height
     rowCards.forEach(card => {
         card.style.height = '';
     });
-    
+
     // Wait a bit for the description to expand
     setTimeout(() => {
         // Find the tallest card in the row
@@ -541,7 +539,7 @@ function adjustRowHeight(expandedCard) {
                 maxHeight = cardHeight;
             }
         });
-        
+
         // Set all cards in the row to the same height
         rowCards.forEach(card => {
             card.style.height = maxHeight + 'px';
@@ -553,7 +551,7 @@ function adjustRowHeight(expandedCard) {
 function resetRowHeight(collapsedCard) {
     // Get all cards in the same row
     const rowCards = getCardsInSameRow(collapsedCard);
-    
+
     // Wait for collapse animation to complete
     setTimeout(() => {
         // Check if any card in the row is still expanded
@@ -561,13 +559,13 @@ function resetRowHeight(collapsedCard) {
             const desc = card.querySelector('.card-description');
             return desc && desc.classList.contains('expanded');
         });
-        
+
         if (!hasExpandedCard) {
             // Remove inline height to recalculate natural heights
             rowCards.forEach(card => {
                 card.style.height = '';
             });
-            
+
             // Wait for DOM to update, then synchronize heights
             setTimeout(() => {
                 let maxHeight = 0;
@@ -577,7 +575,7 @@ function resetRowHeight(collapsedCard) {
                         maxHeight = cardHeight;
                     }
                 });
-                
+
                 rowCards.forEach(card => {
                     card.style.height = maxHeight + 'px';
                 });
@@ -594,10 +592,10 @@ function handleCardClick(id) {
     const item = state.filteredData.find(item => item.id === id);
     if (item) {
         console.log('Card clicked:', item);
-        
+
         // Close the panel to show VR view
         closePanel();
-        
+
         // Load VR panorama if available
         if (state.vrViewer && item.panoramaUrl) {
             loadVRPanorama(item);
@@ -616,7 +614,7 @@ function loadVRPanorama(item) {
             console.error('VR viewer not initialized');
             return;
         }
-        
+
         // Load new panorama
         state.vrViewer.loadScene(item.id, {
             type: 'equirectangular',
@@ -625,7 +623,7 @@ function loadVRPanorama(item) {
             yaw: item.yaw || 0,
             hfov: item.hfov || 100
         });
-        
+
         console.log(`Loaded panorama for: ${item.name.vi}`);
     } catch (error) {
         console.error('Error loading panorama:', error);
@@ -636,7 +634,7 @@ function loadVRPanorama(item) {
 function handleSearch(e) {
     const query = e.target.value.toLowerCase().trim();
     const allData = state.data[state.currentCategory] || [];
-    
+
     if (!query) {
         state.filteredData = allData;
     } else {
@@ -645,21 +643,21 @@ function handleSearch(e) {
             const nameEn = item.name.en.toLowerCase();
             const descVi = item.description.vi.toLowerCase();
             const descEn = item.description.en.toLowerCase();
-            
-            return nameVi.includes(query) || 
-                   nameEn.includes(query) ||
-                   descVi.includes(query) ||
-                   descEn.includes(query);
+
+            return nameVi.includes(query) ||
+                nameEn.includes(query) ||
+                descVi.includes(query) ||
+                descEn.includes(query);
         });
     }
-    
+
     renderContent();
 }
 
 // ===== Language Change =====
 function changeLanguage(lang) {
     state.currentLanguage = lang;
-    
+
     // Update active button
     elements.langBtns.forEach(btn => {
         btn.classList.remove('active');
@@ -667,10 +665,10 @@ function changeLanguage(lang) {
             btn.classList.add('active');
         }
     });
-    
+
     // Update panel title
     elements.panelTitle.textContent = categoryTitles[lang][state.currentCategory];
-    
+
     // Re-render content
     renderContent();
 }
@@ -706,7 +704,7 @@ function showEmptyState() {
             description: 'No matching results found.'
         }
     };
-    
+
     elements.panelContent.innerHTML = `
         <div class="empty-state">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -724,7 +722,7 @@ function showError(message) {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
             </svg>
-            <h3>Lỗi</h3>
+            <h3>Error</h3>
             <p>${message}</p>
         </div>
     `;
@@ -776,6 +774,38 @@ function closeMapModal() {
     }
 }
 
+// ===== Toggle UI Visibility =====
+function toggleActionButtons() {
+    const body = document.body;
+    const isHidden = body.classList.contains('ui-hidden');
+    
+    const arrowRightIcon = toggleButtonsBtn.querySelector('.fa-arrow-right');
+    const arrowLeftIcon = toggleButtonsBtn.querySelector('.fa-arrow-left');
+    
+    if (isHidden) {
+        // Hiện toàn bộ UI
+        body.classList.remove('ui-hidden');
+        
+        // Đổi icon sang mũi tên phải
+        if (arrowRightIcon) arrowRightIcon.style.display = 'block';
+        if (arrowLeftIcon) arrowLeftIcon.style.display = 'none';
+        
+        // Update tooltip
+        if (toggleButtonsBtn) toggleButtonsBtn.setAttribute('title', 'Ẩn toàn bộ UI');
+    } else {
+        // Ẩn toàn bộ UI (trừ logo và nút toggle)
+        body.classList.add('ui-hidden');
+        
+        // Đổi icon sang mũi tên trái
+        if (arrowRightIcon) arrowRightIcon.style.display = 'none';
+        if (arrowLeftIcon) arrowLeftIcon.style.display = 'block';
+        
+        // Update tooltip
+        if (toggleButtonsBtn) toggleButtonsBtn.setAttribute('title', 'Hiện toàn bộ UI');
+    }
+}
+
+
 // ===== Start Application =====
 document.addEventListener('DOMContentLoaded', init);
 
@@ -787,4 +817,3 @@ window.VR360App = {
     closePanel,
     changeLanguage
 };
-

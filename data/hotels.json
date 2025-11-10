@@ -293,16 +293,16 @@
     {
       "id": "scen-001",
       "name": {
-        "vi": "Bãi Đá Ông Địa",
-        "en": "Ong Dia Rock Beach"
+        "vi": "Hòn Ghềnh",
+        "en": "Hon Ghenh"
       },
       "description": {
-        "vi": "Bãi đá tự nhiên độc đáo với hình thù kỳ lạ, điểm chụp ảnh đẹp nổi tiếng ở Phan Thiết.",
-        "en": "Unique natural rock beach with strange shapes, famous beautiful photography spot in Phan Thiet."
+        "vi": "Quần đảo nhỏ với những hòn đá nhô lên giữa biển, cảnh hoàng hôn tuyệt đẹp và lặn ngắm san hô.",
+        "en": "Small archipelago with rocks jutting out of the sea, stunning sunset views and coral snorkeling."
       },
-      "image": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800",
+      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
       "rating": 4.6,
-      "coordinates": { "lat": 10.9100, "lng": 108.0850 }
+      "coordinates": { "lat": 10.9600, "lng": 108.0800 }
     },
     {
       "id": "scen-002",

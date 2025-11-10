@@ -55,6 +55,27 @@ body {
     height: 100%;
 }
 
+/* Đảm bảo panorama vẫn fullscreen khi body/html fullscreen */
+:fullscreen .vr-background,
+:-webkit-full-screen .vr-background,
+:-moz-full-screen .vr-background,
+:-ms-fullscreen .vr-background {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 0 !important;
+}
+
+:fullscreen #panorama,
+:-webkit-full-screen #panorama,
+:-moz-full-screen #panorama,
+:-ms-fullscreen #panorama {
+    width: 100% !important;
+    height: 100% !important;
+}
+
 /* Hide Pannellum hotspot tooltip if not needed */
 .pnlm-tooltip {
     z-index: 500 !important;
@@ -125,18 +146,20 @@ body {
 }
 
 .logo {
-    width: 45px;
-    height: 45px;
+    /* width: 45px; */
+    /* height: 45px; */
+    width: 150px;
     margin-bottom: 30px;
+    margin-left: 110px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--primary-color);
+    /* align-items: center;
+    justify-content: center; */
+    /* background: var(--primary-color); */
     border-radius: 12px;
     font-weight: bold;
     color: var(--text-light);
     font-size: 14px;
-    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    /* box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3); */
 }
 
 .logo img {
@@ -144,6 +167,23 @@ body {
     height: 100%;
     object-fit: contain;
 }
+
+@media (min-width: 1024px) {
+    .logo img {
+        width: 150px;
+    }
+    
+}
+
+@media (max-width: 768px) {
+    .logo {
+        margin-left: 20px;
+    }
+    .logo img {
+        width: 120px;
+    }
+}
+
 
 .logo-text {
     display: block;
@@ -177,6 +217,10 @@ body {
     width: 24px;
     height: 24px;
     transition: var(--transition);
+}
+
+.nav-item i {
+    font-size: 20px;
 }
 
 .nav-item:hover {
@@ -216,7 +260,7 @@ body {
     position: fixed;
     right: 0;  /* Changed from left to right */
     top: 0;
-    width: calc(100% - 70px);  /* full screen trừ sidebar */
+    width: calc(100% - 70px);  /* full screen trá»« sidebar */
     height: 100vh;
     background: linear-gradient(
         135deg,
@@ -226,7 +270,7 @@ body {
     backdrop-filter: blur(40px) saturate(180%);  /* Strong blur effect */
     -webkit-backdrop-filter: blur(30px);
     box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);  /* Shadow on left */
-    z-index: 999;
+    z-index: 9999;
     transform: translateX(100%);  /* Hide to the right */
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
@@ -419,7 +463,7 @@ body {
     flex: 1; /* Take available space */
 }
 
-/* Description wrapper for "...xem thêm" feature */
+/* Description wrapper for "...xem thÃªm" feature */
 .card-description-wrapper {
     position: relative;
 }
@@ -433,7 +477,7 @@ body {
     position: relative;
 }
 
-/* Add ellipsis and space for "xem thêm" when truncated */
+/* Add ellipsis and space for "xem thÃªm" when truncated */
 .card-description.truncated .card-description-text::after {
     content: '...';
     position: absolute;
@@ -466,7 +510,7 @@ body {
     max-height: calc(1.6em * 2);
 }
 
-/* "xem thêm" / "rút gọn" positioned at the end */
+/* "xem thÃªm" / "rÃºt gá»n" positioned at the end */
 .card-description .read-more {
     color: var(--primary-color);
     font-weight: 600;
@@ -529,6 +573,7 @@ body {
     flex-direction: column;
     gap: 12px;
     z-index: 998;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Increase z-index in fullscreen to ensure visibility */
@@ -537,6 +582,7 @@ body {
 :-moz-full-screen .action-buttons,
 :-ms-fullscreen .action-buttons {
     z-index: 2147483647 !important; /* Max z-index value */
+    display: flex !important;
 }
 
 .action-btn {
@@ -556,6 +602,10 @@ body {
     box-shadow: var(--shadow);
 }
 
+.action-btn i {
+    font-size: 20px;
+}
+
 .action-btn:hover {
     background: var(--primary-color);
     color: var(--text-light);
@@ -568,48 +618,11 @@ body {
     height: 24px;
 }
 
-/* Fullscreen button active state */
-#fullscreenBtn.active {
-    background: var(--primary-color);
-    color: var(--text-light);
+/* Loáº¡i bá» style Ä‘á»•i icon fullscreen - GIá»® NGUYÃŠN ICON */
+#fullscreenBtn svg {
+    display: block !important;
 }
 
-/* Fullscreen icons toggle */
-.fullscreen-expand-icon,
-.fullscreen-compress-icon {
-    width: 24px;
-    height: 24px;
-}
-
-/* In fullscreen mode: keep action-buttons visible but hide individual buttons except fullscreen */
-:fullscreen .action-buttons .action-btn:not(#fullscreenBtn),
-:-webkit-full-screen .action-buttons .action-btn:not(#fullscreenBtn),
-:-moz-full-screen .action-buttons .action-btn:not(#fullscreenBtn),
-:-ms-fullscreen .action-buttons .action-btn:not(#fullscreenBtn) {
-    display: none !important;
-}
-
-/* Ensure fullscreen button stays visible */
-:fullscreen #fullscreenBtn,
-:-webkit-full-screen #fullscreenBtn,
-:-moz-full-screen #fullscreenBtn,
-:-ms-fullscreen #fullscreenBtn {
-    display: flex !important;
-}
-
-/* Hide sidebar and language toggle in fullscreen */
-:fullscreen .sidebar,
-:-webkit-full-screen .sidebar,
-:-moz-full-screen .sidebar,
-:-ms-fullscreen .sidebar,
-:fullscreen .language-toggle,
-:-webkit-full-screen .language-toggle,
-:-moz-full-screen .language-toggle,
-:-ms-fullscreen .language-toggle {
-    display: none;
-}
-
-/* ===== Language Toggle ===== */
 /* ===== Language Toggle ===== */
 .language-toggle {
     position: fixed;
@@ -1106,4 +1119,272 @@ input:focus-visible {
     .map-modal-header h2 {
         font-size: 16px;
     }
+}
+
+/* ===== ACTION BUTTONS - Cáº¬P NHáº¬T ===== */
+.action-buttons {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 998;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Giá»¯ z-index cao trong fullscreen */
+:fullscreen .action-buttons,
+:-webkit-full-screen .action-buttons,
+:-moz-full-screen .action-buttons,
+:-ms-fullscreen .action-buttons {
+    z-index: 2147483647 !important;
+}
+
+/* State khi buttons bá»‹ áº©n */
+.action-buttons.hidden {
+    right: -60px;
+}
+
+/* Individual action buttons */
+.action-btn {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--text-primary);
+    box-shadow: var(--shadow);
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.action-btn:hover {
+    background: var(--primary-color);
+    color: var(--text-light);
+    transform: scale(1.1);
+    box-shadow: var(--shadow-lg);
+}
+
+.action-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Animation cho tá»«ng nÃºt khi áº©n */
+.action-buttons.hidden .action-btn:not(.toggle-buttons-btn) {
+    opacity: 0;
+    transform: translateX(80px);
+    pointer-events: none;
+}
+
+/* Cascade animation delays */
+.action-btn:nth-child(1) { transition-delay: 0s; }
+.action-buttons.hidden .action-btn:nth-child(1) { transition-delay: 0.05s; }
+
+.action-btn:nth-child(2) { transition-delay: 0s; }
+.action-buttons.hidden .action-btn:nth-child(2) { transition-delay: 0.1s; }
+
+.action-btn:nth-child(3) { transition-delay: 0s; }
+.action-buttons.hidden .action-btn:nth-child(3) { transition-delay: 0.15s; }
+
+.action-btn:nth-child(4) { transition-delay: 0s; }
+.action-buttons.hidden .action-btn:nth-child(4) { transition-delay: 0.2s; }
+
+.action-btn:nth-child(5) { transition-delay: 0s; }
+.action-buttons.hidden .action-btn:nth-child(5) { transition-delay: 0.25s; }
+
+/* NÃºt toggle - luÃ´n hiá»ƒn thá»‹ */
+.toggle-buttons-btn {
+    background: rgba(33, 150, 243, 0.95) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+    pointer-events: all !important;
+}
+
+.action-buttons.hidden .toggle-buttons-btn {
+    transform: translateX(80px) !important;
+}
+
+.toggle-buttons-btn:hover {
+    background: var(--primary-color) !important;
+    transform: scale(1.1) !important;
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.5) !important;
+}
+
+.action-buttons.hidden .toggle-buttons-btn:hover {
+    transform: translateX(80px) scale(1.1) !important;
+}
+
+/* Arrow icons */
+.arrow-right-icon,
+.arrow-left-icon {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.toggle-buttons-btn:hover .arrow-right-icon {
+    transform: translateX(3px);
+}
+
+.toggle-buttons-btn:hover .arrow-left-icon {
+    transform: translateX(-3px);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .action-buttons {
+        right: 10px;
+        gap: 8px;
+    }
+    
+    .action-buttons.hidden {
+        right: -54px;
+    }
+    
+    .action-btn {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .action-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .action-buttons.hidden .toggle-buttons-btn {
+        transform: translateX(64px) !important;
+    }
+    
+    .action-buttons.hidden .toggle-buttons-btn:hover {
+        transform: translateX(64px) scale(1.1) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .action-buttons {
+        right: 8px;
+        gap: 6px;
+    }
+    
+    .action-buttons.hidden {
+        right: -48px;
+    }
+    
+    .action-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .action-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .action-buttons.hidden .toggle-buttons-btn {
+        transform: translateX(56px) !important;
+    }
+    
+    .action-buttons.hidden .toggle-buttons-btn:hover {
+        transform: translateX(56px) scale(1.1) !important;
+    }
+}
+
+/* ===== ThÃªm smooth transition cho fullscreen ===== */
+#panorama {
+    transition: all 0.3s ease;
+}
+
+/* Optional: ThÃªm border radius khi khÃ´ng fullscreen */
+:not(:fullscreen) #panorama {
+    /* CÃ³ thá»ƒ thÃªm style Ä‘áº·c biá»‡t khi khÃ´ng fullscreen */
+}
+
+/* Äáº£m báº£o cÃ¡c nÃºt hiá»ƒn thá»‹ */
+:fullscreen .action-btn,
+:-webkit-full-screen .action-btn,
+:-moz-full-screen .action-btn,
+:-ms-fullscreen .action-btn {
+    display: flex !important;
+}
+
+/* Äáº£m báº£o sidebar hiá»ƒn thá»‹ */
+:fullscreen .sidebar,
+:-webkit-full-screen .sidebar,
+:-moz-full-screen .sidebar,
+:-ms-fullscreen .sidebar {
+    display: flex !important;
+}
+
+/* Äáº£m báº£o language toggle hiá»ƒn thá»‹ */
+:fullscreen .language-toggle,
+:-webkit-full-screen .language-toggle,
+:-moz-full-screen .language-toggle,
+:-ms-fullscreen .language-toggle {
+    display: flex !important;
+}
+
+/* ===== UI Hidden State (Toggle Hide/Show) ===== */
+/* Khi body có class 'ui-hidden', ẩn toàn bộ UI trừ logo và nút toggle */
+
+body.ui-hidden .sidebar-nav,
+body.ui-hidden .sidebar-footer {
+    display: none;
+}
+
+body.ui-hidden .language-toggle {
+    display: none;
+}
+
+body.ui-hidden .action-buttons .action-btn:not(.toggle-buttons-btn) {
+    opacity: 0;
+    transform: translateX(80px);
+    pointer-events: none;
+}
+
+/* Giữ nút toggle luôn hiển thị */
+body.ui-hidden .toggle-buttons-btn {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+    pointer-events: all !important;
+}
+
+/* Cascade animation delays for hiding */
+body.ui-hidden .action-btn:nth-child(1) { transition-delay: 0.05s; }
+body.ui-hidden .action-btn:nth-child(2) { transition-delay: 0.1s; }
+body.ui-hidden .action-btn:nth-child(3) { transition-delay: 0.15s; }
+body.ui-hidden .action-btn:nth-child(4) { transition-delay: 0.2s; }
+body.ui-hidden .action-btn:nth-child(5) { transition-delay: 0.25s; }
+body.ui-hidden .action-btn:nth-child(6) { transition-delay: 0.3s; }
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    body.ui-hidden .action-buttons .action-btn:not(.toggle-buttons-btn) {
+        transform: translateX(60px);
+    }
+}
+
+@media (max-width: 480px) {
+    body.ui-hidden .action-buttons .action-btn:not(.toggle-buttons-btn) {
+        transform: translateX(55px);
+    }
+}
+
+/* ===== Fullscreen Icons Toggle ===== */
+.fullscreen-expand-icon,
+.fullscreen-compress-icon {
+    width: 24px;
+    height: 24px;
 }

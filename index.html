@@ -10,6 +10,16 @@
     <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
     
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/toggle-btn.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+    <style>
+        .fullscreen-expand-icon,
+        .fullscreen-compress-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 <body>
     <!-- Background VR360 -->
@@ -18,61 +28,44 @@
     <!-- Left Sidebar Menu -->
     <aside class="sidebar">
         <div class="logo">
-            <img src="assets/icons/logo.png" alt="Logo" onerror="this.style.display='none'">
-            <span class="logo-text">VR360</span>
+            <!-- <img src="assets/icons/logo.png" alt="Logo" onerror="this.style.display='none'"> -->
+            <!-- <span class="logo-text">VR360</span> -->
+            <img src="https://vtlink.link/wp-content/uploads/2025/06/Logo-Link-01-e1751259285169.png" alt="Logo" onerror="this.style.display='none'">
         </div>
         
         <nav class="sidebar-nav">
             <button class="nav-item" data-category="info" title="Thông tin">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
+                <i class="fa-solid fa-circle-info"></i>
             </button>
             
             <button class="nav-item active" data-category="hotels" title="Khách sạn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                </svg>
+                <i class="fas fa-hotel"></i>
             </button>
             
             <button class="nav-item" data-category="attractions" title="Du lịch">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                    <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
+                <i class="fas fa-route"></i>
             </button>
             
             <button class="nav-item" data-category="heritage" title="Di tích">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                </svg>
+                <i class="fas fa-landmark"></i>
             </button>
             
             <button class="nav-item" data-category="scenery" title="Danh thắng">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
+                <i class="fa-solid fa-mountain-sun"></i>
             </button>
             
             <button class="nav-item" data-category="map" title="Bản đồ">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
-                </svg>
+                <i class="fa-solid fa-map"></i>
             </button>
         </nav>
 
         <div class="sidebar-footer">
             <button class="nav-item" data-category="settings" title="Cài đặt">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
+                <i class="fa-solid fa-gear"></i>
             </button>
             
             <button class="nav-item" title="Trợ giúp">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
+                <i class="fa-solid fa-circle-question"></i>
             </button>
         </div>
     </aside>
@@ -82,17 +75,13 @@
         <div class="panel-header">
             <h2 id="panelTitle">DANH SÁCH KHÁCH SẠN TẠI PHAN THIẾT</h2>
             <button class="close-btn" id="closePanel">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M6 18L18 6M6 6l12 12"/>
-                </svg>
+                <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
         
         <div class="panel-search">
             <input type="text" id="searchInput" placeholder="Tìm kiếm...">
-            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
         </div>
 
         <div class="panel-content" id="panelContent">
@@ -101,41 +90,43 @@
     </div>
 
     <!-- Right Action Buttons -->
-    <div class="action-buttons">
+    <div class="action-buttons" id="actionButtons">
         <button class="action-btn" title="Trang chủ">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-            </svg>
+            </svg> -->
+            <i class="fa-solid fa-house"></i>
         </button>
         
         <button class="action-btn" title="Thông tin">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
+            <i class="fa-solid fa-circle-info"></i>
         </button>
         
         <button class="action-btn" title="Video">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-                <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
+            <i class="fa-solid fa-video"></i>
         </button>
         
         <button class="action-btn" title="Ảnh">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
+            <i class="fa-solid fa-image"></i>
+        </button>
+
+        <button class="action-btn" title="News">
+            <i class="fa-solid fa-newspaper"></i>
         </button>
         
         <button class="action-btn" id="fullscreenBtn" title="Toàn màn hình">
-            <!-- Icon expand (mặc định) -->
-            <svg class="fullscreen-expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
-            </svg>
-            <!-- Icon compress (khi fullscreen) -->
-            <svg class="fullscreen-compress-icon" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3"/>
-            </svg>
+            <!-- Icon Expand (mặc định) -->
+            <i class="fa-solid fa-expand fullscreen-expand-icon" style="align-items: center; justify-items: center;"></i>
+            <!-- Icon Compress (khi fullscreen) -->
+            <i class="fa-solid fa-compress fullscreen-compress-icon" style="display: none;"></i>
+        </button>
+        
+        <!-- Toggle Hide/Show Buttons -->
+        <button class="action-btn toggle-buttons-btn" id="toggleButtonsBtn" title="Ẩn/Hiện các nút">
+            <!-- Icon mũi tên phải (mặc định) -->
+            <i class="fa-solid fa-arrow-right"></i>
+            <!-- Icon mũi tên trái (khi ẩn) -->
+            <i class="fa-solid fa-arrow-left" style="display: none;"></i>
         </button>
     </div>
 
@@ -151,9 +142,7 @@
             <div class="map-modal-header">
                 <h2>BẢN ĐỒ DU LỊCH PHAN THIẾT - VŨNG TÀU</h2>
                 <button class="close-btn" id="closeMapModal">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
             <div class="map-modal-body">

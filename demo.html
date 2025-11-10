@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST - VR360 Features</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Test box */
+        .test-info {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            max-width: 400px;
+            z-index: 100;
+        }
+
+        .test-info h2 {
+            color: #2196F3;
+            margin-bottom: 15px;
+        }
+
+        .test-info ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .test-info li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .test-info li:last-child {
+            border-bottom: none;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .status.working { background: #4CAF50; color: white; }
+        .status.hidden { background: #f44336; color: white; }
+
+        /* Logo */
+        .logo {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 60px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: #2196F3;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 999;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 100px;
+            width: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 10px;
+            border-radius: 0 15px 15px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 999;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar .nav-item {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 2px solid #2196F3;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            color: #2196F3;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-item:hover {
+            background: #2196F3;
+            color: white;
+        }
+
+        /* Language toggle */
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 999;
+            display: flex;
+            gap: 10px;
+            transition: opacity 0.3s ease;
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border: 2px solid #2196F3;
+            background: white;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #2196F3;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: #2196F3;
+            color: white;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 9998;
+        }
+
+        .action-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-size: 20px;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .action-btn:hover {
+            background: #2196F3;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Toggle button special style */
+        .toggle-buttons-btn {
+            background: rgba(33, 150, 243, 0.95) !important;
+            color: white !important;
+        }
+
+        /* UI Hidden state */
+        body.ui-hidden .sidebar,
+        body.ui-hidden .language-toggle {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        body.ui-hidden .action-btn:not(.toggle-buttons-btn) {
+            opacity: 0;
+            transform: translateX(80px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        body.ui-hidden .test-info {
+            display: none;
+        }
+
+        /* Cascade delays */
+        body.ui-hidden .action-btn:nth-child(1) { transition-delay: 0.05s; }
+        body.ui-hidden .action-btn:nth-child(2) { transition-delay: 0.1s; }
+        body.ui-hidden .action-btn:nth-child(3) { transition-delay: 0.15s; }
+        body.ui-hidden .action-btn:nth-child(4) { transition-delay: 0.2s; }
+        body.ui-hidden .action-btn:nth-child(5) { transition-delay: 0.25s; }
+        body.ui-hidden .action-btn:nth-child(6) { transition-delay: 0.3s; }
+
+        /* Fullscreen support */
+        :fullscreen .action-buttons,
+        :-webkit-full-screen .action-buttons,
+        :-moz-full-screen .action-buttons,
+        :-ms-fullscreen .action-buttons {
+            z-index: 2147483647 !important;
+            display: flex !important;
+        }
+
+        :fullscreen .sidebar,
+        :-webkit-full-screen .sidebar,
+        :-moz-full-screen .sidebar,
+        :-ms-fullscreen .sidebar {
+            display: flex !important;
+        }
+
+        :fullscreen .language-toggle,
+        :-webkit-full-screen .language-toggle,
+        :-moz-full-screen .language-toggle,
+        :-ms-fullscreen .language-toggle {
+            display: flex !important;
+        }
+
+        /* Content */
+        .content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            z-index: 1;
+        }
+
+        #fullscreen-container {
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="fullscreen-container">
+        <!-- Test Info Box -->
+        <div class="test-info">
+            <h2>🧪 TEST FEATURES</h2>
+            <ul>
+                <li>
+                    <strong>Fullscreen:</strong>
+                    <span class="status working" id="fullscreen-status">Working</span>
+                </li>
+                <li>
+                    <strong>Toggle UI:</strong>
+                    <span class="status working" id="toggle-status">Working</span>
+                </li>
+                <li>
+                    <strong>Sidebar:</strong>
+                    <span class="status working" id="sidebar-status">Visible</span>
+                </li>
+                <li>
+                    <strong>Language:</strong>
+                    <span class="status working" id="language-status">Visible</span>
+                </li>
+            </ul>
+            <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                ✅ Click nút <strong>Expand</strong> để test fullscreen<br>
+                ✅ Click nút <strong>Toggle</strong> (mũi tên) để ẩn UI
+            </p>
+        </div>
+
+        <!-- Logo -->
+        <div class="logo">LOGO</div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="nav-item"><i class="fa-solid fa-info"></i></div>
+            <div class="nav-item"><i class="fa-solid fa-hotel"></i></div>
+            <div class="nav-item"><i class="fa-solid fa-map"></i></div>
+        </div>
+
+        <!-- Language Toggle -->
+        <div class="language-toggle">
+            <button class="lang-btn">VN</button>
+            <button class="lang-btn">EN</button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="action-btn" title="Home">
+                <i class="fa-solid fa-house"></i>
+            </button>
+            <button class="action-btn" title="Info">
+                <i class="fa-solid fa-circle-info"></i>
+            </button>
+            <button class="action-btn" title="Video">
+                <i class="fa-solid fa-video"></i>
+            </button>
+            <button class="action-btn" title="Image">
+                <i class="fa-solid fa-image"></i>
+            </button>
+            <button class="action-btn" title="News">
+                <i class="fa-solid fa-newspaper"></i>
+            </button>
+            <button class="action-btn" id="fullscreenBtn" title="Toàn màn hình">
+                <i class="fa-solid fa-expand fullscreen-expand-icon"></i>
+                <i class="fa-solid fa-compress fullscreen-compress-icon" style="display: none;"></i>
+            </button>
+            <button class="action-btn toggle-buttons-btn" id="toggleButtonsBtn" title="Ẩn/Hiện UI">
+                <i class="fa-solid fa-arrow-right"></i>
+                <i class="fa-solid fa-arrow-left" style="display: none;"></i>
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            VR360 TEST DEMO
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const body = document.body;
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const toggleButtonsBtn = document.getElementById('toggleButtonsBtn');
+        const fullscreenContainer = document.getElementById('fullscreen-container');
+
+        // Status elements
+        const fullscreenStatus = document.getElementById('fullscreen-status');
+        const toggleStatus = document.getElementById('toggle-status');
+        const sidebarStatus = document.getElementById('sidebar-status');
+        const languageStatus = document.getElementById('language-status');
+
+        // Toggle Fullscreen
+        function toggleFullscreen() {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && 
+                !document.mozFullScreenElement && !document.msFullscreenElement) {
+                // Enter fullscreen
+                if (fullscreenContainer.requestFullscreen) {
+                    fullscreenContainer.requestFullscreen();
+                } else if (fullscreenContainer.webkitRequestFullscreen) {
+                    fullscreenContainer.webkitRequestFullscreen();
+                } else if (fullscreenContainer.mozRequestFullScreen) {
+                    fullscreenContainer.mozRequestFullScreen();
+                } else if (fullscreenContainer.msRequestFullscreen) {
+                    fullscreenContainer.msRequestFullscreen();
+                }
+            } else {
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        // Handle Fullscreen Change
+        function handleFullscreenChange() {
+            const expandIcon = document.querySelector('.fullscreen-expand-icon');
+            const compressIcon = document.querySelector('.fullscreen-compress-icon');
+            const isFullscreen = !!(document.fullscreenElement || 
+                                   document.webkitFullscreenElement || 
+                                   document.mozFullScreenElement || 
+                                   document.msFullscreenElement);
+            
+            if (fullscreenBtn) {
+                if (isFullscreen) {
+                    // Đang ở fullscreen - hiện icon compress
+                    if (expandIcon) expandIcon.style.display = 'none';
+                    if (compressIcon) compressIcon.style.display = 'block';
+                    fullscreenBtn.setAttribute('title', 'Thu nhỏ');
+                    fullscreenStatus.textContent = 'Fullscreen ON';
+                    fullscreenStatus.classList.add('working');
+                } else {
+                    // Không fullscreen - hiện icon expand
+                    if (expandIcon) expandIcon.style.display = 'block';
+                    if (compressIcon) compressIcon.style.display = 'none';
+                    fullscreenBtn.setAttribute('title', 'Toàn màn hình');
+                    fullscreenStatus.textContent = 'Working';
+                    fullscreenStatus.classList.add('working');
+                }
+            }
+        }
+
+        // Toggle UI Visibility
+        function toggleUI() {
+            const isHidden = body.classList.contains('ui-hidden');
+            
+            const arrowRightIcon = toggleButtonsBtn.querySelector('.fa-arrow-right');
+            const arrowLeftIcon = toggleButtonsBtn.querySelector('.fa-arrow-left');
+            
+            if (isHidden) {
+                // Hiện toàn bộ UI
+                body.classList.remove('ui-hidden');
+                
+                // Đổi icon sang mũi tên phải
+                if (arrowRightIcon) arrowRightIcon.style.display = 'block';
+                if (arrowLeftIcon) arrowLeftIcon.style.display = 'none';
+                
+                toggleButtonsBtn.setAttribute('title', 'Ẩn toàn bộ UI');
+                toggleStatus.textContent = 'Working';
+                toggleStatus.classList.remove('hidden');
+                toggleStatus.classList.add('working');
+                sidebarStatus.textContent = 'Visible';
+                sidebarStatus.classList.remove('hidden');
+                sidebarStatus.classList.add('working');
+                languageStatus.textContent = 'Visible';
+                languageStatus.classList.remove('hidden');
+                languageStatus.classList.add('working');
+            } else {
+                // Ẩn toàn bộ UI (trừ logo và nút toggle)
+                body.classList.add('ui-hidden');
+                
+                // Đổi icon sang mũi tên trái
+                if (arrowRightIcon) arrowRightIcon.style.display = 'none';
+                if (arrowLeftIcon) arrowLeftIcon.style.display = 'block';
+                
+                toggleButtonsBtn.setAttribute('title', 'Hiện toàn bộ UI');
+                toggleStatus.textContent = 'UI Hidden';
+                toggleStatus.classList.remove('working');
+                toggleStatus.classList.add('hidden');
+                sidebarStatus.textContent = 'Hidden';
+                sidebarStatus.classList.remove('working');
+                sidebarStatus.classList.add('hidden');
+                languageStatus.textContent = 'Hidden';
+                languageStatus.classList.remove('working');
+                languageStatus.classList.add('hidden');
+            }
+        }
+
+        // Event Listeners
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+        toggleButtonsBtn.addEventListener('click', toggleUI);
+
+        // Fullscreen change events
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+        console.log('✅ Test demo loaded successfully!');
+        console.log('✅ Click "Expand" button to test fullscreen');
+        console.log('✅ Click "Toggle" button (arrow) to hide UI');
+    </script>
+</body>
+</html>

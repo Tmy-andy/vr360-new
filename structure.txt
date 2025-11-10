@@ -1,21 +1,16 @@
 ├── .gitignore
-├── ADD-YOUR-360-IMAGES.md
 ├── CHANGELOG.md
-├── DEPLOYMENT.md
-├── FEATURES.md
-├── PROJECT-SUMMARY.md
-├── QUICKSTART.md
 ├── README.md
-├── START-HERE.md
-├── VR-INTEGRATION.md
 ├── assets/
 │   ├── icon/
 │   └── panoramas/
 ├── css/
 │   ├── style.css
-│   └── style.min.css
+│   ├── style.min.css
+│   └── toggle-btn.css
 ├── data/
 │   └── hotels.json
+├── demo.html
 ├── index.html
 ├── js/
 │   ├── api-service.js
@@ -29,7 +24,14 @@
 ├── structure.txt
 ├── tree_script.py
 └── update/
+    ├── ADD-YOUR-360-IMAGES.md
+    ├── DEPLOYMENT.md
+    ├── FEATURES.md
     ├── GLASSMORPHISM-UPDATE.html
     ├── GLASSMORPHISM-UPDATE.md
+    ├── PROJECT-SUMMARY.md
+    ├── QUICKSTART.md
+    ├── START-HERE.md
     ├── VERSION-1.1-UPDATES.md
-    └── VERSION-1.2-UPDATES.md
+    ├── VERSION-1.2-UPDATES.md
+    └── VR-INTEGRATION.md
