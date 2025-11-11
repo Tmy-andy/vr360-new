@@ -920,7 +920,9 @@ body {
 
 /* ===== LANDSCAPE MODE MOBILE OPTIMIZATION ===== */
 /* Responsive cho chế độ landscape trên mobile (chiều cao nhỏ) */
-@media (max-height: 600px) and (orientation: landscape) {
+
+/* Landscape cho màn hình nhỏ (mobile) - 2 columns */
+@media (max-height: 600px) and (orientation: landscape) and (max-width: 800px) {
     /* Giảm kích thước sidebar */
     .sidebar {
         width: 50px;
@@ -1024,6 +1026,255 @@ body {
     .panel-content {
         padding: 12px 15px;
     }
+    
+    /* ===== CARD LAYOUT HORIZONTAL 2 COLUMNS ===== */
+    /* Cards giống mobile nhưng 2 thẻ một hàng */
+    .content-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .content-card {
+        display: flex;
+        flex-direction: row;
+        height: auto;
+        min-height: 100px;
+    }
+    
+    .card-image {
+        width: 100px;
+        min-width: 100px;
+        height: auto;
+        border-radius: 12px 0 0 12px;
+    }
+    
+    .card-content {
+        flex: 1;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    
+    .card-title {
+        font-size: 14px;
+        margin-bottom: 6px;
+        -webkit-line-clamp: 2;
+        max-height: calc(1.4em * 2);
+    }
+    
+    .card-description {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+    
+    .card-description .card-description-text {
+        -webkit-line-clamp: 2;
+        max-height: calc(1.5em * 2);
+    }
+    
+    .card-description.expanded .card-description-text {
+        -webkit-line-clamp: unset !important;
+        max-height: none !important;
+    }
+    
+    .card-footer {
+        margin-top: auto;
+        padding-top: 6px;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .card-rating {
+        font-size: 12px;
+    }
+    
+    .card-rating i {
+        font-size: 11px;
+    }
+    
+    .card-price {
+        font-size: 13px;
+    }
+}
+
+/* Landscape cho màn hình rộng hơn (tablet/large mobile) - 3 columns */
+@media (max-height: 600px) and (orientation: landscape) and (min-width: 801px) {
+    /* Giảm kích thước sidebar */
+    .sidebar {
+        width: 50px;
+        padding: 10px 0;
+    }
+    
+    /* Giảm kích thước logo */
+    .logo {
+        width: 35px;
+        margin-bottom: 15px;
+        margin-left: 10px;
+    }
+    
+    .logo img {
+        width: 35px;
+    }
+    
+    /* Giảm kích thước nav items */
+    .sidebar-nav {
+        gap: 6px;
+        padding: 0 8px;
+    }
+    
+    .nav-item {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+    }
+    
+    .nav-item i {
+        font-size: 16px;
+    }
+    
+    .nav-item.active::before {
+        height: 24px;
+    }
+    
+    /* Giảm kích thước sidebar footer */
+    .sidebar-footer {
+        padding: 0 8px;
+        padding-top: 10px;
+        gap: 6px;
+    }
+    
+    /* Điều chỉnh action buttons */
+    .action-buttons {
+        right: 8px;
+        gap: 5px;
+    }
+    
+    .action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+    }
+    
+    .action-btn i {
+        font-size: 16px;
+    }
+    
+    .action-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* Giảm kích thước language toggle */
+    .language-toggle {
+        top: 8px;
+        right: 8px;
+        padding: 4px;
+        border-radius: 8px;
+    }
+    
+    .lang-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    /* Điều chỉnh content panel */
+    .content-panel {
+        width: calc(100% - 50px);
+    }
+    
+    .panel-header {
+        padding: 12px 15px;
+    }
+    
+    .panel-header h2 {
+        font-size: 16px;
+    }
+    
+    .close-btn {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .panel-search {
+        padding: 12px 15px;
+    }
+    
+    .panel-content {
+        padding: 12px 15px;
+    }
+    
+    /* ===== CARD LAYOUT HORIZONTAL 3 COLUMNS ===== */
+    /* Cards giống mobile nhưng 3 thẻ một hàng */
+    .content-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+    
+    .content-card {
+        display: flex;
+        flex-direction: row;
+        height: auto;
+        min-height: 100px;
+    }
+    
+    .card-image {
+        width: 95px;
+        min-width: 95px;
+        height: auto;
+        border-radius: 12px 0 0 12px;
+    }
+    
+    .card-content {
+        flex: 1;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    
+    .card-title {
+        font-size: 13px;
+        margin-bottom: 6px;
+        -webkit-line-clamp: 2;
+        max-height: calc(1.4em * 2);
+    }
+    
+    .card-description {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+    
+    .card-description .card-description-text {
+        -webkit-line-clamp: 2;
+        max-height: calc(1.5em * 2);
+    }
+    
+    .card-description.expanded .card-description-text {
+        -webkit-line-clamp: unset !important;
+        max-height: none !important;
+    }
+    
+    .card-footer {
+        margin-top: auto;
+        padding-top: 6px;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .card-rating {
+        font-size: 11px;
+    }
+    
+    .card-rating i {
+        font-size: 10px;
+    }
+    
+    .card-price {
+        font-size: 12px;
+    }
 }
 
 /* Landscape mode cho màn hình rất nhỏ (< 500px cao) */
@@ -1082,7 +1333,6 @@ body {
         top: 6px;
         right: 6px;
         padding: 3px;
-        margin-right: 75px;
     }
     
     .lang-btn {
@@ -1105,6 +1355,84 @@ body {
     .close-btn {
         width: 28px;
         height: 28px;
+    }
+    
+    .panel-search {
+        padding: 10px 12px;
+    }
+    
+    .panel-content {
+        padding: 10px 12px;
+    }
+    
+    /* ===== CARD LAYOUT HORIZONTAL 2 COLUMNS (màn hình nhỏ hơn) ===== */
+    .content-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 10px;
+    }
+    
+    .content-card {
+        display: flex;
+        flex-direction: row;
+        height: auto;
+        min-height: 90px;
+    }
+    
+    .card-image {
+        width: 85px;
+        min-width: 85px;
+        height: auto;
+        border-radius: 10px 0 0 10px;
+    }
+    
+    .card-content {
+        flex: 1;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    
+    .card-title {
+        font-size: 13px;
+        margin-bottom: 5px;
+        -webkit-line-clamp: 2;
+        max-height: calc(1.4em * 2);
+    }
+    
+    .card-description {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 11px;
+        line-height: 1.4;
+    }
+    
+    .card-description .card-description-text {
+        -webkit-line-clamp: 2;
+        max-height: calc(1.4em * 2);
+    }
+    
+    .card-description.expanded .card-description-text {
+        -webkit-line-clamp: unset !important;
+        max-height: none !important;
+    }
+    
+    .card-footer {
+        margin-top: auto;
+        padding-top: 5px;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .card-rating {
+        font-size: 11px;
+    }
+    
+    .card-rating i {
+        font-size: 10px;
+    }
+    
+    .card-price {
+        font-size: 12px;
     }
 }
 
