@@ -2,37 +2,32 @@
 const state = {
     currentCategory: 'hotels',
     data: null,
+    tagsData: null,
     filteredData: null,
     currentLanguage: 'vi',
     vrViewer: null,
-    filters: {
-        rating: '',
-        price: ''
-    }
+    selectedTags: [] // Array of selected tag IDs
 };
 
 // ===== VR360 Viewer Initialization =====
 function initVRViewer() {
     try {
-        // Initialize Pannellum VR viewer
         state.vrViewer = pannellum.viewer('panorama', {
             type: 'equirectangular',
-            // Sample panorama - replace with your actual 360 image
             panorama: 'https://pannellum.org/images/alma.jpg',
             autoLoad: true,
-            autoRotate: -2, // Auto rotate slowly
+            autoRotate: -2,
             showControls: false,
             showFullscreenCtrl: false,
             showZoomCtrl: false,
             mouseZoom: true,
             compass: true,
-            hfov: 100, // Field of view
+            hfov: 100,
             pitch: 0,
             yaw: 0,
             minHfov: 50,
             maxHfov: 120
         });
-
         console.log('VR360 viewer initialized successfully');
     } catch (error) {
         console.error('Error initializing VR viewer:', error);
@@ -48,14 +43,11 @@ const elements = {
     searchInput: document.getElementById('searchInput'),
     navItems: document.querySelectorAll('.nav-item[data-category]'),
     langBtns: document.querySelectorAll('.lang-btn'),
-    filterSection: document.getElementById('filterSection'),
-    filterToggleBtn: document.getElementById('filterToggleBtn'),
-    filterBody: document.getElementById('filterBody'),
-    sortFilter: document.getElementById('sortFilter'),
-    ratingFilter: document.getElementById('ratingFilter'),
-    priceFilter: document.getElementById('priceFilter'),
-    clearFilters: document.getElementById('clearFilters'),
-    activeFilters: document.getElementById('activeFilters'),
+    tagsSection: document.getElementById('tagsSection'),
+    tagsToggleBtn: document.getElementById('tagsToggleBtn'),
+    tagsBody: document.getElementById('tagsBody'),
+    tagsGrid: document.getElementById('tagsGrid'),
+    clearTags: document.getElementById('clearTags'),
     searchClearBtn: document.getElementById('searchClearBtn')
 };
 
@@ -90,13 +82,10 @@ const categoryTitles = {
 
 // ===== Toggle Fullscreen =====
 function toggleFullscreen() {
-    // Fullscreen the entire document instead of just the panorama
-    // This ensures all UI elements remain visible
     const fullscreenElement = document.documentElement;
 
     if (!document.fullscreenElement && !document.webkitFullscreenElement &&
         !document.mozFullScreenElement && !document.msFullscreenElement) {
-        // Enter fullscreen
         if (fullscreenElement.requestFullscreen) {
             fullscreenElement.requestFullscreen();
         } else if (fullscreenElement.webkitRequestFullscreen) {
@@ -107,7 +96,6 @@ function toggleFullscreen() {
             fullscreenElement.msRequestFullscreen();
         }
     } else {
-        // Exit fullscreen
         if (document.exitFullscreen) {
             document.exitFullscreen();
         } else if (document.webkitExitFullscreen) {
@@ -131,12 +119,10 @@ function handleFullscreenChange() {
 
     if (fullscreenBtn) {
         if (isFullscreen) {
-            // In fullscreen - show compress icon
             if (expandIcon) expandIcon.style.display = 'none';
             if (compressIcon) compressIcon.style.display = 'block';
             fullscreenBtn.setAttribute('title', 'Thu nhỏ');
         } else {
-            // Not fullscreen - show expand icon
             if (expandIcon) expandIcon.style.display = 'block';
             if (compressIcon) compressIcon.style.display = 'none';
             fullscreenBtn.setAttribute('title', 'Toàn màn hình');
@@ -147,13 +133,12 @@ function handleFullscreenChange() {
 // ===== Initialize App =====
 async function init() {
     try {
-        // Initialize VR viewer first
         initVRViewer();
-
         showLoading();
         await loadData();
+        await loadTagsData();
         setupEventListeners();
-        loadCategory('hotels'); // Default category
+        loadCategory('hotels');
     } catch (error) {
         console.error('Error initializing app:', error);
         showError('Không thể tải dữ liệu. Vui lòng thử lại sau.');
@@ -172,193 +157,123 @@ async function loadData() {
     }
 }
 
+// ===== Load Tags Data =====
+async function loadTagsData() {
+    try {
+        const response = await fetch('data/tags.json');
+        if (!response.ok) throw new Error('Failed to load tags');
+        state.tagsData = await response.json();
+    } catch (error) {
+        console.error('Error loading tags:', error);
+        state.tagsData = { tags: [] };
+    }
+}
 
-// ===== Filter Functions =====
-function applyFilters() {
+// ===== Render Tags =====
+function renderTags() {
+    if (!state.tagsData || !state.tagsData.tags || !elements.tagsGrid) return;
+    
+    const lang = state.currentLanguage;
+    const html = state.tagsData.tags.map(tag => {
+        const isActive = state.selectedTags.includes(tag.id);
+        return `
+            <button class="tag-item ${isActive ? 'active' : ''}" 
+                    data-tag-id="${tag.id}" 
+                    style="--tag-color: ${tag.color}">
+                <i class="fas ${tag.icon}"></i>
+                <span>${tag.name[lang]}</span>
+            </button>
+        `;
+    }).join('');
+    
+    elements.tagsGrid.innerHTML = html;
+    attachTagListeners();
+}
+
+// ===== Attach Tag Listeners =====
+function attachTagListeners() {
+    const tagItems = document.querySelectorAll('.tag-item');
+    tagItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const tagId = e.currentTarget.dataset.tagId;
+            toggleTag(tagId);
+        });
+    });
+}
+
+// ===== Toggle Tag =====
+function toggleTag(tagId) {
+    const index = state.selectedTags.indexOf(tagId);
+    
+    if (index === -1) {
+        // Add tag
+        state.selectedTags.push(tagId);
+    } else {
+        // Remove tag
+        state.selectedTags.splice(index, 1);
+    }
+    
+    // Update UI
+    renderTags();
+    updateClearTagsButton();
+    applyTagsFilter();
+}
+
+// ===== Update Clear Tags Button =====
+function updateClearTagsButton() {
+    if (elements.clearTags) {
+        elements.clearTags.style.display = state.selectedTags.length > 0 ? 'flex' : 'none';
+    }
+}
+
+// ===== Clear All Tags =====
+function clearAllTags() {
+    state.selectedTags = [];
+    renderTags();
+    updateClearTagsButton();
+    loadCategory(state.currentCategory);
+}
+
+// ===== Apply Tags Filter =====
+function applyTagsFilter() {
     const allData = state.data[state.currentCategory] || [];
-    let filtered = [...allData];
     
-    // Apply rating filter
-    if (state.filters.rating) {
-        const minRating = parseFloat(state.filters.rating);
-        filtered = filtered.filter(item => item.rating && item.rating >= minRating);
-    }
-    
-    // Apply price filter
-    if (state.filters.price) {
-        const [min, max] = state.filters.price.split('-').map(p => parseInt(p));
-        filtered = filtered.filter(item => {
-            if (!item.price) return false;
-            return item.price >= min && item.price <= max;
+    if (state.selectedTags.length === 0) {
+        // No tags selected, show all
+        state.filteredData = allData;
+    } else {
+        // Filter hotels that have ALL selected tags
+        state.filteredData = allData.filter(item => {
+            if (!item.tags || !Array.isArray(item.tags)) return false;
+            
+            // Check if item has all selected tags
+            return state.selectedTags.every(tagId => item.tags.includes(tagId));
         });
     }
     
-    state.filteredData = filtered;
     renderContent();
 }
 
-function clearFilters() {
-    state.filters.rating = '';
-    state.filters.price = '';
-    
-    if (elements.ratingFilter) elements.ratingFilter.value = '';
-    if (elements.priceFilter) elements.priceFilter.value = '';
-    
-    loadCategory(state.currentCategory);
-}
-
-function toggleFilterSection() {
-    if (elements.filterSection) {
+// ===== Toggle Tags Section =====
+function toggleTagsSection() {
+    if (elements.tagsSection) {
         if (state.currentCategory === 'hotels') {
-            elements.filterSection.classList.add('active');
+            elements.tagsSection.classList.add('active');
         } else {
-            elements.filterSection.classList.remove('active');
+            elements.tagsSection.classList.remove('active');
         }
     }
 }
 
-
-// ===== Filter & Sort Functions =====
-
-// Toggle filter section
-function toggleFilterSection() {
-    if (elements.filterSection) {
-        if (state.currentCategory === 'hotels') {
-            elements.filterSection.classList.add('active');
-        } else {
-            elements.filterSection.classList.remove('active');
-        }
+// ===== Toggle Tags Collapse =====
+function toggleTagsCollapse() {
+    if (elements.tagsSection) {
+        elements.tagsSection.classList.toggle('collapsed');
     }
 }
 
-// Toggle filter collapse
-function toggleFilterCollapse() {
-    if (elements.filterSection) {
-        elements.filterSection.classList.toggle('collapsed');
-    }
-}
-
-// Apply filters and sort
-function applyFiltersAndSort() {
-    let filtered = [...(state.data[state.currentCategory] || [])];
-    
-    // Apply rating filter
-    if (state.filters.rating) {
-        const minRating = parseFloat(state.filters.rating);
-        filtered = filtered.filter(item => item.rating && item.rating >= minRating);
-    }
-    
-    // Apply price filter
-    if (state.filters.price) {
-        const [min, max] = state.filters.price.split('-').map(p => parseInt(p));
-        filtered = filtered.filter(item => {
-            if (!item.price) return false;
-            return item.price >= min && item.price <= max;
-        });
-    }
-    
-    // Apply sort
-    if (state.filters.sort) {
-        const [field, order] = state.filters.sort.split('-');
-        filtered.sort((a, b) => {
-            let valA, valB;
-            
-            if (field === 'rating') {
-                valA = a.rating || 0;
-                valB = b.rating || 0;
-            } else if (field === 'price') {
-                valA = a.price || 0;
-                valB = b.price || 0;
-            } else if (field === 'name') {
-                valA = (a.name.vi || '').toLowerCase();
-                valB = (b.name.vi || '').toLowerCase();
-                return order === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
-            }
-            
-            return order === 'asc' ? valA - valB : valB - valA;
-        });
-    }
-    
-    state.filteredData = filtered;
-    updateActiveFilterTags();
-    renderContent();
-}
-
-// Update active filter tags
-function updateActiveFilterTags() {
-    if (!elements.activeFilters) return;
-    
-    const tags = [];
-    
-    // Sort tag
-    if (state.filters.sort) {
-        const sortText = {
-            'rating-desc': 'Đánh giá cao',
-            'rating-asc': 'Đánh giá thấp',
-            'price-asc': 'Giá thấp → cao',
-            'price-desc': 'Giá cao → thấp',
-            'name-asc': 'Tên A → Z',
-            'name-desc': 'Tên Z → A'
-        };
-        tags.push(`<span class="filter-tag">
-            <i class="fas fa-sort"></i> ${sortText[state.filters.sort]}
-            <i class="fas fa-times" onclick="removeFilter('sort')"></i>
-        </span>`);
-    }
-    
-    // Rating tag
-    if (state.filters.rating) {
-        const ratingText = state.filters.rating === '5' ? '5 sao' : `${state.filters.rating}+ sao`;
-        tags.push(`<span class="filter-tag">
-            <i class="fas fa-star"></i> ${ratingText}
-            <i class="fas fa-times" onclick="removeFilter('rating')"></i>
-        </span>`);
-    }
-    
-    // Price tag
-    if (state.filters.price) {
-        const [min, max] = state.filters.price.split('-');
-        const minM = parseInt(min) / 1000000;
-        const maxM = parseInt(max) / 1000000;
-        const priceText = maxM > 900 ? `> ${minM.toFixed(1)}tr` : `${minM.toFixed(1)} - ${maxM.toFixed(1)}tr`;
-        tags.push(`<span class="filter-tag">
-            <i class="fas fa-tag"></i> ${priceText}
-            <i class="fas fa-times" onclick="removeFilter('price')"></i>
-        </span>`);
-    }
-    
-    elements.activeFilters.innerHTML = tags.join('');
-}
-
-// Remove single filter
-function removeFilter(filterType) {
-    state.filters[filterType] = '';
-    
-    if (filterType === 'sort' && elements.sortFilter) {
-        elements.sortFilter.value = '';
-    } else if (filterType === 'rating' && elements.ratingFilter) {
-        elements.ratingFilter.value = '';
-    } else if (filterType === 'price' && elements.priceFilter) {
-        elements.priceFilter.value = '';
-    }
-    
-    applyFiltersAndSort();
-}
-
-// Clear all filters
-function clearAllFilters() {
-    state.filters.sort = '';
-    state.filters.rating = '';
-    state.filters.price = '';
-    
-    if (elements.sortFilter) elements.sortFilter.value = '';
-    if (elements.ratingFilter) elements.ratingFilter.value = '';
-    if (elements.priceFilter) elements.priceFilter.value = '';
-    
-    loadCategory(state.currentCategory);
-}
-
-// Clear search
+// ===== Clear Search =====
 function clearSearch() {
     if (elements.searchInput) {
         elements.searchInput.value = '';
@@ -369,38 +284,14 @@ function clearSearch() {
 
 // ===== Event Listeners =====
 function setupEventListeners() {
-    // Filter toggle
-    if (elements.filterToggleBtn) {
-        elements.filterToggleBtn.addEventListener('click', toggleFilterCollapse);
+    // Tags toggle
+    if (elements.tagsToggleBtn) {
+        elements.tagsToggleBtn.addEventListener('click', toggleTagsCollapse);
     }
     
-    // Sort filter
-    if (elements.sortFilter) {
-        elements.sortFilter.addEventListener('change', (e) => {
-            state.filters.sort = e.target.value;
-            applyFiltersAndSort();
-        });
-    }
-    
-    // Rating filter
-    if (elements.ratingFilter) {
-        elements.ratingFilter.addEventListener('change', (e) => {
-            state.filters.rating = e.target.value;
-            applyFiltersAndSort();
-        });
-    }
-    
-    // Price filter
-    if (elements.priceFilter) {
-        elements.priceFilter.addEventListener('change', (e) => {
-            state.filters.price = e.target.value;
-            applyFiltersAndSort();
-        });
-    }
-    
-    // Clear filters
-    if (elements.clearFilters) {
-        elements.clearFilters.addEventListener('click', clearAllFilters);
+    // Clear tags
+    if (elements.clearTags) {
+        elements.clearTags.addEventListener('click', clearAllTags);
     }
     
     // Search clear button
@@ -415,25 +306,6 @@ function setupEventListeners() {
                 elements.searchClearBtn.style.display = e.target.value ? 'flex' : 'none';
             }
         });
-    }
-
-    // Filter event listeners
-    if (elements.ratingFilter) {
-        elements.ratingFilter.addEventListener('change', (e) => {
-            state.filters.rating = e.target.value;
-            applyFilters();
-        });
-    }
-    
-    if (elements.priceFilter) {
-        elements.priceFilter.addEventListener('change', (e) => {
-            state.filters.price = e.target.value;
-            applyFilters();
-        });
-    }
-    
-    if (elements.clearFilters) {
-        elements.clearFilters.addEventListener('click', clearFilters);
     }
 
     // Navigation items click
@@ -469,13 +341,12 @@ function setupEventListeners() {
         });
     });
 
-    // Click outside panel to close (optional)
+    // Click outside panel to close
     document.addEventListener('click', (e) => {
         if (elements.contentPanel.classList.contains('active')) {
             const clickedOutside = !elements.contentPanel.contains(e.target) &&
                 !e.target.closest('.nav-item[data-category]');
             if (clickedOutside && !e.target.closest('.action-btn')) {
-                // Uncomment below to enable close on outside click
                 // closePanel();
             }
         }
@@ -509,7 +380,7 @@ function setupEventListeners() {
     // Toggle action buttons
     if (toggleButtonsBtn) {
         toggleButtonsBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent event bubbling
+            e.stopPropagation();
             toggleActionButtons();
         });
     }
@@ -517,10 +388,8 @@ function setupEventListeners() {
 
 // ===== Navigation Click Handler =====
 function handleNavClick(category) {
-    // Special handling for "map" button
     if (category === 'map') {
         openMapModal();
-        // Update active state for map button
         elements.navItems.forEach(item => {
             item.classList.remove('active');
             if (item.dataset.category === 'map') {
@@ -530,20 +399,17 @@ function handleNavClick(category) {
         return;
     }
 
-    // Check if clicking on already active button
     const clickedButton = Array.from(elements.navItems).find(
         item => item.dataset.category === category
     );
 
     if (clickedButton && clickedButton.classList.contains('active') &&
         elements.contentPanel.classList.contains('active')) {
-        // Second click on active button -> close panel
         closePanel();
         clickedButton.classList.remove('active');
         return;
     }
 
-    // Update active state
     elements.navItems.forEach(item => {
         item.classList.remove('active');
         if (item.dataset.category === category) {
@@ -551,7 +417,6 @@ function handleNavClick(category) {
         }
     });
 
-    // Load category
     loadCategory(category);
     openPanel();
 }
@@ -561,28 +426,23 @@ function loadCategory(category) {
     state.currentCategory = category;
     state.filteredData = state.data[category] || [];
 
-    // Update panel title
     elements.panelTitle.textContent = categoryTitles[state.currentLanguage][category] || category;
 
-    // Clear search
     if (elements.searchInput) elements.searchInput.value = '';
     if (elements.searchClearBtn) elements.searchClearBtn.style.display = 'none';
     
-    // Reset filters
-    state.filters.sort = '';
-    state.filters.rating = '';
-    state.filters.price = '';
-    if (elements.sortFilter) elements.sortFilter.value = '';
-    if (elements.ratingFilter) elements.ratingFilter.value = '';
-    if (elements.priceFilter) elements.priceFilter.value = '';
+    // Reset tags
+    state.selectedTags = [];
     
-    // Toggle filter section visibility
-    toggleFilterSection();
+    // Toggle tags section visibility
+    toggleTagsSection();
     
-    // Clear active filter tags
-    if (elements.activeFilters) elements.activeFilters.innerHTML = '';
+    // Render tags if hotel category
+    if (category === 'hotels') {
+        renderTags();
+        updateClearTagsButton();
+    }
 
-    // Render content
     renderContent();
 }
 
@@ -602,8 +462,6 @@ function renderContent() {
     `;
 
     elements.panelContent.innerHTML = html;
-
-    // Add click listeners to cards
     attachCardListeners();
 }
 
@@ -619,7 +477,7 @@ function createCard(item) {
         <div class="content-card" data-id="${item.id}">
             <div class="card-image">
                 ${item.image ?
-            `<img src="${item.image}" alt="${title}" onerror="this.parentElement.innerHTML='<span class=\'card-placeholder\'><i class=\"fas fa-camera\"></i></span>'">` :
+            `<img src="${item.image}" alt="${title}" onerror="this.parentElement.innerHTML='<span class=\\'card-placeholder\\'><i class=\\"fas fa-camera\\"></i></span>'">` :
             `<span class="card-placeholder"><i class="fas fa-camera"></i></span>`
         }
             </div>
@@ -651,7 +509,7 @@ function formatPrice(price, lang) {
             maximumFractionDigits: 0
         }).format(price);
     } else {
-        const usdPrice = price / 24000; // Approximate conversion
+        const usdPrice = price / 24000;
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
@@ -670,25 +528,19 @@ function attachCardListeners() {
         });
     });
 
-    // Apply truncation logic for card descriptions
     applyDescriptionTruncation();
-
-    // Synchronize initial row heights
     synchronizeRowHeights();
 }
 
 // ===== Synchronize Row Heights =====
 function synchronizeRowHeights() {
-    // Skip on mobile
     if (window.innerWidth <= 480) return;
 
     const cards = Array.from(document.querySelectorAll('.content-card'));
     if (cards.length === 0) return;
 
-    // Reset all heights first
     cards.forEach(card => card.style.height = '');
 
-    // Group cards by row
     const rows = {};
     cards.forEach(card => {
         const top = card.offsetTop;
@@ -698,7 +550,6 @@ function synchronizeRowHeights() {
         rows[top].push(card);
     });
 
-    // Set equal height for each row
     Object.values(rows).forEach(rowCards => {
         let maxHeight = 0;
         rowCards.forEach(card => {
@@ -727,22 +578,18 @@ function applyDescriptionTruncation() {
 
         if (!title || !descriptionEl || !descriptionText || !readMore) return;
 
-        // DON'T reset expanded state - keep it if it exists
         const wasExpanded = descriptionEl.classList.contains('expanded');
 
-        // On mobile, always use 2 lines
         if (isMobile) {
             if (!wasExpanded) {
                 descriptionText.style.webkitLineClamp = '2';
             }
             title.classList.remove('two-lines');
         } else {
-            // Check if title is 2 lines on desktop/tablet
             const titleLineHeight = parseFloat(getComputedStyle(title).lineHeight);
             const titleHeight = title.scrollHeight;
             const titleLines = Math.round(titleHeight / titleLineHeight);
 
-            // Adjust description line clamp based on title lines (only if not expanded)
             if (!wasExpanded) {
                 if (titleLines >= 2) {
                     title.classList.add('two-lines');
@@ -754,9 +601,7 @@ function applyDescriptionTruncation() {
             }
         }
 
-        // Wait for DOM update before checking truncation
         setTimeout(() => {
-            // If already has click handler, skip
             if (readMore.dataset.hasHandler === 'true') return;
 
             const descTextHeight = descriptionText.scrollHeight;
@@ -768,25 +613,20 @@ function applyDescriptionTruncation() {
                 readMore.textContent = wasExpanded ? 'rút gọn' : 'xem thêm';
                 readMore.dataset.hasHandler = 'true';
 
-                // Add click handler for "read more" / "collapse"
                 readMore.onclick = (e) => {
                     e.stopPropagation();
 
                     const isExpanded = descriptionEl.classList.contains('expanded');
 
                     if (isExpanded) {
-                        // Collapse
                         descriptionEl.classList.remove('expanded');
                         descriptionEl.classList.add('truncated');
                         readMore.textContent = 'xem thêm';
-                        // Reset row height after collapse animation
                         setTimeout(() => resetRowHeight(card), 50);
                     } else {
-                        // Expand
                         descriptionEl.classList.add('expanded');
                         descriptionEl.classList.remove('truncated');
                         readMore.textContent = 'rút gọn';
-                        // Adjust row height after expand animation
                         setTimeout(() => adjustRowHeight(card), 50);
                     }
                 };
@@ -802,24 +642,18 @@ function applyDescriptionTruncation() {
 function getCardsInSameRow(targetCard) {
     const allCards = Array.from(document.querySelectorAll('.content-card'));
     const targetTop = targetCard.offsetTop;
-
-    // Find all cards with the same offsetTop (same row)
     return allCards.filter(card => Math.abs(card.offsetTop - targetTop) < 5);
 }
 
 // ===== Adjust Row Height =====
 function adjustRowHeight(expandedCard) {
-    // Get all cards in the same row
     const rowCards = getCardsInSameRow(expandedCard);
 
-    // Remove inline height first to get natural height
     rowCards.forEach(card => {
         card.style.height = '';
     });
 
-    // Wait a bit for the description to expand
     setTimeout(() => {
-        // Find the tallest card in the row
         let maxHeight = 0;
         rowCards.forEach(card => {
             const cardHeight = card.scrollHeight;
@@ -828,7 +662,6 @@ function adjustRowHeight(expandedCard) {
             }
         });
 
-        // Set all cards in the row to the same height
         rowCards.forEach(card => {
             card.style.height = maxHeight + 'px';
         });
@@ -837,24 +670,19 @@ function adjustRowHeight(expandedCard) {
 
 // ===== Reset Row Height =====
 function resetRowHeight(collapsedCard) {
-    // Get all cards in the same row
     const rowCards = getCardsInSameRow(collapsedCard);
 
-    // Wait for collapse animation to complete
     setTimeout(() => {
-        // Check if any card in the row is still expanded
         const hasExpandedCard = rowCards.some(card => {
             const desc = card.querySelector('.card-description');
             return desc && desc.classList.contains('expanded');
         });
 
         if (!hasExpandedCard) {
-            // Remove inline height to recalculate natural heights
             rowCards.forEach(card => {
                 card.style.height = '';
             });
 
-            // Wait for DOM to update, then synchronize heights
             setTimeout(() => {
                 let maxHeight = 0;
                 rowCards.forEach(card => {
@@ -869,7 +697,6 @@ function resetRowHeight(collapsedCard) {
                 });
             }, 50);
         } else {
-            // Recalculate height if there are still expanded cards
             adjustRowHeight(collapsedCard);
         }
     }, 100);
@@ -880,17 +707,12 @@ function handleCardClick(id) {
     const item = state.filteredData.find(item => item.id === id);
     if (item) {
         console.log('Card clicked:', item);
-
-        // Close the panel to show VR view
         closePanel();
 
-        // Load VR panorama if available
         if (state.vrViewer && item.panoramaUrl) {
             loadVRPanorama(item);
         } else {
-            // Fallback if no panorama URL
             console.log('No panorama URL for this location');
-            // You can show a message or use default panorama
         }
     }
 }
@@ -903,7 +725,6 @@ function loadVRPanorama(item) {
             return;
         }
 
-        // Load new panorama
         state.vrViewer.loadScene(item.id, {
             type: 'equirectangular',
             panorama: item.panoramaUrl,
@@ -925,6 +746,11 @@ function handleSearch(e) {
 
     if (!query) {
         state.filteredData = allData;
+        // Re-apply tags filter if any tags selected
+        if (state.selectedTags.length > 0) {
+            applyTagsFilter();
+            return;
+        }
     } else {
         state.filteredData = allData.filter(item => {
             const nameVi = item.name.vi.toLowerCase();
@@ -937,6 +763,14 @@ function handleSearch(e) {
                 descVi.includes(query) ||
                 descEn.includes(query);
         });
+        
+        // Apply tags filter to search results
+        if (state.selectedTags.length > 0) {
+            state.filteredData = state.filteredData.filter(item => {
+                if (!item.tags || !Array.isArray(item.tags)) return false;
+                return state.selectedTags.every(tagId => item.tags.includes(tagId));
+            });
+        }
     }
 
     renderContent();
@@ -946,7 +780,6 @@ function handleSearch(e) {
 function changeLanguage(lang) {
     state.currentLanguage = lang;
 
-    // Update active button
     elements.langBtns.forEach(btn => {
         btn.classList.remove('active');
         if (btn.dataset.lang === lang) {
@@ -954,10 +787,13 @@ function changeLanguage(lang) {
         }
     });
 
-    // Update panel title
     elements.panelTitle.textContent = categoryTitles[lang][state.currentCategory];
+    
+    // Re-render tags with new language
+    if (state.currentCategory === 'hotels') {
+        renderTags();
+    }
 
-    // Re-render content
     renderContent();
 }
 
@@ -1029,19 +865,15 @@ function debounce(func, wait) {
     };
 }
 
-// Optimize search with debouncing
 elements.searchInput.addEventListener('input', debounce(handleSearch, 300));
 
-// Re-apply truncation on window resize
 window.addEventListener('resize', debounce(applyDescriptionTruncation, 200));
 
 // ===== Map Modal Functions =====
 function openMapModal() {
     if (mapModal) {
         mapModal.classList.add('active');
-        // Close content panel if open
         closePanel();
-        // Remove active from other buttons
         elements.navItems.forEach(item => {
             if (item.dataset.category !== 'map') {
                 item.classList.remove('active');
@@ -1053,7 +885,6 @@ function openMapModal() {
 function closeMapModal() {
     if (mapModal) {
         mapModal.classList.remove('active');
-        // Remove active state from map button
         elements.navItems.forEach(item => {
             if (item.dataset.category === 'map') {
                 item.classList.remove('active');
@@ -1071,35 +902,22 @@ function toggleActionButtons() {
     const arrowLeftIcon = toggleButtonsBtn.querySelector('.fa-arrow-left');
     
     if (isHidden) {
-        // Show entire UI
         body.classList.remove('ui-hidden');
-        
-        // Change icon to right arrow
         if (arrowRightIcon) arrowRightIcon.style.display = 'block';
         if (arrowLeftIcon) arrowLeftIcon.style.display = 'none';
-        
-        // Update tooltip
         if (toggleButtonsBtn) toggleButtonsBtn.setAttribute('title', 'Ẩn toàn bộ UI');
     } else {
-        // Hide entire UI (except logo and toggle button)
         body.classList.add('ui-hidden');
-        
-        // Change icon to left arrow
         if (arrowRightIcon) arrowRightIcon.style.display = 'none';
         if (arrowLeftIcon) arrowLeftIcon.style.display = 'block';
-        
-        // Update tooltip
         if (toggleButtonsBtn) toggleButtonsBtn.setAttribute('title', 'Hiện toàn bộ UI');
     }
 }
-
 
 // ===== Start Application =====
 document.addEventListener('DOMContentLoaded', init);
 
 // ===== Export for potential use in other modules =====
-window.removeFilter = removeFilter;
-
 window.VR360App = {
     state,
     loadCategory,

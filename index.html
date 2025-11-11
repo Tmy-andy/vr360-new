@@ -77,7 +77,7 @@
             </button>
         </div>
         
-        <!-- Search & Filter Section -->
+        <!-- Search & Tags Section -->
         <div class="panel-search">
             <!-- Search Input -->
             <div class="search-container">
@@ -88,83 +88,28 @@
                 </button>
             </div>
             
-            <!-- Filter Section -->
-            <div class="filter-section-modern" id="filterSection">
-                <div class="filter-header">
-                    <div class="filter-title">
-                        <i class="fas fa-sliders-h"></i>
-                        <span>Bộ lọc & Sắp xếp</span>
+            <!-- Tags Filter Section -->
+            <div class="tags-section-modern" id="tagsSection">
+                <div class="tags-header">
+                    <div class="tags-title">
+                        <i class="fas fa-tags"></i>
+                        <span>Lọc theo tiện ích</span>
                     </div>
-                    <button class="filter-toggle-btn" id="filterToggleBtn">
+                    <button class="tags-toggle-btn" id="tagsToggleBtn">
                         <i class="fas fa-chevron-down"></i>
                     </button>
                 </div>
                 
-                <div class="filter-body" id="filterBody">
-                    <div class="filter-grid">
-                        <!-- Sort -->
-                        <div class="filter-item">
-                            <label class="filter-label">
-                                <i class="fas fa-sort-amount-down"></i>
-                                <span>Sắp xếp</span>
-                            </label>
-                            <div class="select-wrapper">
-                                <select id="sortFilter" class="filter-select-modern">
-                                    <option value="">Mặc định</option>
-                                    <option value="rating-desc">Đánh giá cao nhất</option>
-                                    <option value="rating-asc">Đánh giá thấp nhất</option>
-                                    <option value="price-asc">Giá thấp đến cao</option>
-                                    <option value="price-desc">Giá cao đến thấp</option>
-                                    <option value="name-asc">Tên A → Z</option>
-                                    <option value="name-desc">Tên Z → A</option>
-                                </select>
-                                <i class="fas fa-chevron-down select-icon"></i>
-                            </div>
-                        </div>
-                        
-                        <!-- Rating -->
-                        <div class="filter-item">
-                            <label class="filter-label">
-                                <i class="fas fa-star"></i>
-                                <span>Đánh giá</span>
-                            </label>
-                            <div class="select-wrapper">
-                                <select id="ratingFilter" class="filter-select-modern">
-                                    <option value="">Tất cả</option>
-                                    <option value="5">5 sao</option>
-                                    <option value="4.5">Từ 4.5 sao</option>
-                                    <option value="4">Từ 4 sao</option>
-                                    <option value="3.5">Từ 3.5 sao</option>
-                                </select>
-                                <i class="fas fa-chevron-down select-icon"></i>
-                            </div>
-                        </div>
-                        
-                        <!-- Price -->
-                        <div class="filter-item">
-                            <label class="filter-label">
-                                <i class="fas fa-tag"></i>
-                                <span>Giá phòng</span>
-                            </label>
-                            <div class="select-wrapper">
-                                <select id="priceFilter" class="filter-select-modern">
-                                    <option value="">Tất cả</option>
-                                    <option value="0-1500000">< 1.5 triệu</option>
-                                    <option value="1500000-2500000">1.5 - 2.5 triệu</option>
-                                    <option value="2500000-3500000">2.5 - 3.5 triệu</option>
-                                    <option value="3500000-999999999">> 3.5 triệu</option>
-                                </select>
-                                <i class="fas fa-chevron-down select-icon"></i>
-                            </div>
-                        </div>
+                <div class="tags-body" id="tagsBody">
+                    <div class="tags-grid" id="tagsGrid">
+                        <!-- Tags will be loaded dynamically -->
                     </div>
                     
                     <!-- Actions -->
-                    <div class="filter-actions">
-                        <div class="active-filters" id="activeFilters"></div>
-                        <button class="btn-clear-filters" id="clearFilters">
+                    <div class="tags-actions">
+                        <button class="btn-clear-tags" id="clearTags" style="display: none;">
                             <i class="fas fa-redo-alt"></i>
-                            <span>Đặt lại</span>
+                            <span>Xóa bộ lọc</span>
                         </button>
                     </div>
                 </div>

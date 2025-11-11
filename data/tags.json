@@ -1,0 +1,184 @@
+{
+  "tags": [
+    {
+      "id": "tag-001",
+      "name": {
+        "vi": "View Biển",
+        "en": "Sea View"
+      },
+      "icon": "fa-water",
+      "color": "#0EA5E9"
+    },
+    {
+      "id": "tag-002",
+      "name": {
+        "vi": "Hồ Bơi",
+        "en": "Swimming Pool"
+      },
+      "icon": "fa-person-swimming",
+      "color": "#06B6D4"
+    },
+    {
+      "id": "tag-003",
+      "name": {
+        "vi": "5 Sao",
+        "en": "5 Star"
+      },
+      "icon": "fa-star",
+      "color": "#F59E0B"
+    },
+    {
+      "id": "tag-004",
+      "name": {
+        "vi": "Resort",
+        "en": "Resort"
+      },
+      "icon": "fa-umbrella-beach",
+      "color": "#EC4899"
+    },
+    {
+      "id": "tag-005",
+      "name": {
+        "vi": "Spa",
+        "en": "Spa"
+      },
+      "icon": "fa-spa",
+      "color": "#8B5CF6"
+    },
+    {
+      "id": "tag-006",
+      "name": {
+        "vi": "Nhà Hàng",
+        "en": "Restaurant"
+      },
+      "icon": "fa-utensils",
+      "color": "#EF4444"
+    },
+    {
+      "id": "tag-007",
+      "name": {
+        "vi": "Wifi Miễn Phí",
+        "en": "Free Wifi"
+      },
+      "icon": "fa-wifi",
+      "color": "#10B981"
+    },
+    {
+      "id": "tag-008",
+      "name": {
+        "vi": "Bãi Biển Riêng",
+        "en": "Private Beach"
+      },
+      "icon": "fa-person-swimming",
+      "color": "#14B8A6"
+    },
+    {
+      "id": "tag-009",
+      "name": {
+        "vi": "Phòng Gym",
+        "en": "Gym"
+      },
+      "icon": "fa-dumbbell",
+      "color": "#6366F1"
+    },
+    {
+      "id": "tag-010",
+      "name": {
+        "vi": "Bar",
+        "en": "Bar"
+      },
+      "icon": "fa-martini-glass",
+      "color": "#A855F7"
+    },
+    {
+      "id": "tag-011",
+      "name": {
+        "vi": "Gần Trung Tâm",
+        "en": "City Center"
+      },
+      "icon": "fa-location-dot",
+      "color": "#F97316"
+    },
+    {
+      "id": "tag-012",
+      "name": {
+        "vi": "Phù Hợp Gia Đình",
+        "en": "Family Friendly"
+      },
+      "icon": "fa-users",
+        "color": "#22C55E"
+    },
+    {
+      "id": "tag-013",
+      "name": {
+        "vi": "Có Bãi Đỗ Xe",
+        "en": "Parking"
+      },
+      "icon": "fa-square-parking",
+      "color": "#3B82F6"
+    },
+    {
+      "id": "tag-014",
+      "name": {
+        "vi": "Dịch Vụ Đưa Đón",
+        "en": "Shuttle Service"
+      },
+      "icon": "fa-van-shuttle",
+      "color": "#84CC16"
+    },
+    {
+      "id": "tag-015",
+      "name": {
+        "vi": "Phòng Hội Nghị",
+        "en": "Meeting Room"
+      },
+      "icon": "fa-users-rectangle",
+      "color": "#06B6D4"
+    },
+    {
+      "id": "tag-016",
+      "name": {
+        "vi": "Sân Golf",
+        "en": "Golf Course"
+      },
+      "icon": "fa-golf-ball-tee",
+      "color": "#059669"
+    },
+    {
+      "id": "tag-017",
+      "name": {
+        "vi": "Chấp Nhận Pet",
+        "en": "Pet Friendly"
+      },
+      "icon": "fa-dog",
+      "color": "#F59E0B"
+    },
+    {
+      "id": "tag-018",
+      "name": {
+        "vi": "Buffet Sáng",
+        "en": "Breakfast Buffet"
+      },
+      "icon": "fa-mug-hot",
+      "color": "#EF4444"
+    },
+    {
+      "id": "tag-019",
+      "name": {
+        "vi": "Kiến Trúc Đẹp",
+        "en": "Beautiful Design"
+      },
+      "icon": "fa-building",
+      "color": "#8B5CF6"
+    },
+    {
+      "id": "tag-020",
+      "name": {
+        "vi": "Giá Tốt",
+        "en": "Good Price"
+      },
+      "icon": "fa-tag",
+      "color": "#10B981"
+    }
+  ]
+}

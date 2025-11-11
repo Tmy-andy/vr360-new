@@ -17,7 +17,8 @@
       "panoramaUrl": "https://pannellum.org/images/alma.jpg",
       "pitch": 0,
       "yaw": 0,
-      "hfov": 100
+      "hfov": 100,
+      "tags": ["tag-001", "tag-002", "tag-003", "tag-004", "tag-005", "tag-006", "tag-007", "tag-008"]
     },
     {
       "id": "hotel-002",
@@ -36,7 +37,8 @@
       "panoramaUrl": "https://pannellum.org/images/bma-0.jpg",
       "pitch": 0,
       "yaw": 0,
-      "hfov": 100
+      "hfov": 100,
+      "tags": ["tag-001", "tag-002", "tag-004", "tag-006", "tag-007", "tag-008", "tag-012", "tag-016", "tag-018"]
     },
     {
       "id": "hotel-003",
@@ -55,7 +57,8 @@
       "panoramaUrl": "https://pannellum.org/images/jfk.jpg",
       "pitch": 0,
       "yaw": 0,
-      "hfov": 100
+      "hfov": 100,
+      "tags": ["tag-001", "tag-002", "tag-003", "tag-005", "tag-006", "tag-007", "tag-009", "tag-010", "tag-018", "tag-019"]
     },
     {
       "id": "hotel-004",
@@ -74,7 +77,8 @@
       "panoramaUrl": "https://pannellum.org/images/cerro-toco-0.jpg",
       "pitch": -10,
       "yaw": 180,
-      "hfov": 110
+      "hfov": 110,
+      "tags": ["tag-001", "tag-002", "tag-004", "tag-005", "tag-007", "tag-008", "tag-018", "tag-020"]
     },
     {
       "id": "hotel-005",
@@ -93,7 +97,8 @@
       "panoramaUrl": "https://pannellum.org/images/from-tree.jpg",
       "pitch": 5,
       "yaw": 90,
-      "hfov": 100
+      "hfov": 100,
+      "tags": ["tag-001", "tag-002", "tag-003", "tag-004", "tag-005", "tag-006", "tag-008", "tag-009", "tag-010", "tag-019"]
     },
     {
       "id": "hotel-006",
@@ -112,7 +117,8 @@
       "panoramaUrl": "https://pannellum.org/images/alma.jpg",
       "pitch": 0,
       "yaw": 45,
-      "hfov": 100
+      "hfov": 100,
+      "tags": ["tag-002", "tag-006", "tag-007", "tag-012", "tag-013", "tag-018", "tag-019", "tag-020"]
     },
     {
       "id": "hotel-007",
@@ -131,7 +137,8 @@
       "panoramaUrl": "https://pannellum.org/images/bma-0.jpg",
       "pitch": -5,
       "yaw": 270,
-      "hfov": 110
+      "hfov": 110,
+      "tags": ["tag-001", "tag-002", "tag-003", "tag-004", "tag-005", "tag-006", "tag-008", "tag-010", "tag-019"]
     },
     {
       "id": "hotel-008",
@@ -150,7 +157,8 @@
       "panoramaUrl": "https://pannellum.org/images/jfk.jpg",
       "pitch": 0,
       "yaw": 135,
-      "hfov": 100
+      "hfov": 100,
+      "tags": ["tag-001", "tag-002", "tag-004", "tag-005", "tag-006", "tag-007", "tag-008", "tag-012", "tag-013", "tag-018"]
     }
   ],
   "attractions": [

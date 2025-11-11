@@ -9,7 +9,8 @@
 │   ├── style.min.css
 │   └── toggle-btn.css
 ├── data/
-│   └── hotels.json
+│   ├── hotels.json
+│   └── tags.json
 ├── demo.html
 ├── index.html
 ├── js/
