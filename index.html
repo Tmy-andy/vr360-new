@@ -28,8 +28,6 @@
     <!-- Left Sidebar Menu -->
     <aside class="sidebar">
         <div class="logo">
-            <!-- <img src="assets/icons/logo.png" alt="Logo" onerror="this.style.display='none'"> -->
-            <!-- <span class="logo-text">VR360</span> -->
             <img src="https://vtlink.link/wp-content/uploads/2025/06/Logo-Link-01-e1751259285169.png" alt="Logo" onerror="this.style.display='none'">
         </div>
         
@@ -70,7 +68,7 @@
         </div>
     </aside>
 
-    <!-- Content Panel (Slide-in from left) -->
+    <!-- Content Panel -->
     <div class="content-panel" id="contentPanel">
         <div class="panel-header">
             <h2 id="panelTitle">DANH SÁCH KHÁCH SẠN TẠI PHAN THIẾT</h2>
@@ -79,22 +77,108 @@
             </button>
         </div>
         
+        <!-- Search & Filter Section -->
         <div class="panel-search">
-            <input type="text" id="searchInput" placeholder="Tìm kiếm...">
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <!-- Search Input -->
+            <div class="search-container">
+                <i class="fas fa-search search-icon-right"></i>
+                <input type="text" id="searchInput" placeholder="Tìm kiếm khách sạn..." class="search-input-modern">
+                <button class="search-clear-btn" id="searchClearBtn" style="display: none;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Filter Section -->
+            <div class="filter-section-modern" id="filterSection">
+                <div class="filter-header">
+                    <div class="filter-title">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Bộ lọc & Sắp xếp</span>
+                    </div>
+                    <button class="filter-toggle-btn" id="filterToggleBtn">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                
+                <div class="filter-body" id="filterBody">
+                    <div class="filter-grid">
+                        <!-- Sort -->
+                        <div class="filter-item">
+                            <label class="filter-label">
+                                <i class="fas fa-sort-amount-down"></i>
+                                <span>Sắp xếp</span>
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="sortFilter" class="filter-select-modern">
+                                    <option value="">Mặc định</option>
+                                    <option value="rating-desc">Đánh giá cao nhất</option>
+                                    <option value="rating-asc">Đánh giá thấp nhất</option>
+                                    <option value="price-asc">Giá thấp đến cao</option>
+                                    <option value="price-desc">Giá cao đến thấp</option>
+                                    <option value="name-asc">Tên A → Z</option>
+                                    <option value="name-desc">Tên Z → A</option>
+                                </select>
+                                <i class="fas fa-chevron-down select-icon"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="filter-item">
+                            <label class="filter-label">
+                                <i class="fas fa-star"></i>
+                                <span>Đánh giá</span>
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="ratingFilter" class="filter-select-modern">
+                                    <option value="">Tất cả</option>
+                                    <option value="5">5 sao</option>
+                                    <option value="4.5">Từ 4.5 sao</option>
+                                    <option value="4">Từ 4 sao</option>
+                                    <option value="3.5">Từ 3.5 sao</option>
+                                </select>
+                                <i class="fas fa-chevron-down select-icon"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Price -->
+                        <div class="filter-item">
+                            <label class="filter-label">
+                                <i class="fas fa-tag"></i>
+                                <span>Giá phòng</span>
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="priceFilter" class="filter-select-modern">
+                                    <option value="">Tất cả</option>
+                                    <option value="0-1500000">< 1.5 triệu</option>
+                                    <option value="1500000-2500000">1.5 - 2.5 triệu</option>
+                                    <option value="2500000-3500000">2.5 - 3.5 triệu</option>
+                                    <option value="3500000-999999999">> 3.5 triệu</option>
+                                </select>
+                                <i class="fas fa-chevron-down select-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="filter-actions">
+                        <div class="active-filters" id="activeFilters"></div>
+                        <button class="btn-clear-filters" id="clearFilters">
+                            <i class="fas fa-redo-alt"></i>
+                            <span>Đặt lại</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="panel-content" id="panelContent">
-            <!-- Content will be loaded here dynamically -->
+            <!-- Content loaded dynamically -->
         </div>
     </div>
 
     <!-- Right Action Buttons -->
     <div class="action-buttons" id="actionButtons">
         <button class="action-btn" title="Trang chủ">
-            <!-- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-            </svg> -->
             <i class="fa-solid fa-house"></i>
         </button>
         
@@ -115,17 +199,12 @@
         </button>
         
         <button class="action-btn" id="fullscreenBtn" title="Toàn màn hình">
-            <!-- Icon Expand (mặc định) -->
-            <i class="fa-solid fa-expand fullscreen-expand-icon" style="align-items: center; justify-items: center;"></i>
-            <!-- Icon Compress (khi fullscreen) -->
+            <i class="fa-solid fa-expand fullscreen-expand-icon"></i>
             <i class="fa-solid fa-compress fullscreen-compress-icon" style="display: none;"></i>
         </button>
         
-        <!-- Toggle Hide/Show Buttons -->
-        <button class="action-btn toggle-buttons-btn" id="toggleButtonsBtn" title="Ẩn/Hiện các nút">
-            <!-- Icon mũi tên phải (mặc định) -->
+        <button class="action-btn toggle-buttons-btn" id="toggleButtonsBtn" title="Ẩn/Hiện">
             <i class="fa-solid fa-arrow-right"></i>
-            <!-- Icon mũi tên trái (khi ẩn) -->
             <i class="fa-solid fa-arrow-left" style="display: none;"></i>
         </button>
     </div>
@@ -150,7 +229,7 @@
                     src="https://bandodulichvungtau.com/" 
                     frameborder="0" 
                     allowfullscreen
-                    title="Bản đồ du lịch Vũng Tàu - Phan Thiết">
+                    title="Bản đồ du lịch">
                 </iframe>
             </div>
         </div>

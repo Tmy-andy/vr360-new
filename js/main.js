@@ -4,7 +4,11 @@ const state = {
     data: null,
     filteredData: null,
     currentLanguage: 'vi',
-    vrViewer: null
+    vrViewer: null,
+    filters: {
+        rating: '',
+        price: ''
+    }
 };
 
 // ===== VR360 Viewer Initialization =====
@@ -43,7 +47,16 @@ const elements = {
     panelContent: document.getElementById('panelContent'),
     searchInput: document.getElementById('searchInput'),
     navItems: document.querySelectorAll('.nav-item[data-category]'),
-    langBtns: document.querySelectorAll('.lang-btn')
+    langBtns: document.querySelectorAll('.lang-btn'),
+    filterSection: document.getElementById('filterSection'),
+    filterToggleBtn: document.getElementById('filterToggleBtn'),
+    filterBody: document.getElementById('filterBody'),
+    sortFilter: document.getElementById('sortFilter'),
+    ratingFilter: document.getElementById('ratingFilter'),
+    priceFilter: document.getElementById('priceFilter'),
+    clearFilters: document.getElementById('clearFilters'),
+    activeFilters: document.getElementById('activeFilters'),
+    searchClearBtn: document.getElementById('searchClearBtn')
 };
 
 // ===== Map Modal Elements =====
@@ -159,8 +172,270 @@ async function loadData() {
     }
 }
 
+
+// ===== Filter Functions =====
+function applyFilters() {
+    const allData = state.data[state.currentCategory] || [];
+    let filtered = [...allData];
+    
+    // Apply rating filter
+    if (state.filters.rating) {
+        const minRating = parseFloat(state.filters.rating);
+        filtered = filtered.filter(item => item.rating && item.rating >= minRating);
+    }
+    
+    // Apply price filter
+    if (state.filters.price) {
+        const [min, max] = state.filters.price.split('-').map(p => parseInt(p));
+        filtered = filtered.filter(item => {
+            if (!item.price) return false;
+            return item.price >= min && item.price <= max;
+        });
+    }
+    
+    state.filteredData = filtered;
+    renderContent();
+}
+
+function clearFilters() {
+    state.filters.rating = '';
+    state.filters.price = '';
+    
+    if (elements.ratingFilter) elements.ratingFilter.value = '';
+    if (elements.priceFilter) elements.priceFilter.value = '';
+    
+    loadCategory(state.currentCategory);
+}
+
+function toggleFilterSection() {
+    if (elements.filterSection) {
+        if (state.currentCategory === 'hotels') {
+            elements.filterSection.classList.add('active');
+        } else {
+            elements.filterSection.classList.remove('active');
+        }
+    }
+}
+
+
+// ===== Filter & Sort Functions =====
+
+// Toggle filter section
+function toggleFilterSection() {
+    if (elements.filterSection) {
+        if (state.currentCategory === 'hotels') {
+            elements.filterSection.classList.add('active');
+        } else {
+            elements.filterSection.classList.remove('active');
+        }
+    }
+}
+
+// Toggle filter collapse
+function toggleFilterCollapse() {
+    if (elements.filterSection) {
+        elements.filterSection.classList.toggle('collapsed');
+    }
+}
+
+// Apply filters and sort
+function applyFiltersAndSort() {
+    let filtered = [...(state.data[state.currentCategory] || [])];
+    
+    // Apply rating filter
+    if (state.filters.rating) {
+        const minRating = parseFloat(state.filters.rating);
+        filtered = filtered.filter(item => item.rating && item.rating >= minRating);
+    }
+    
+    // Apply price filter
+    if (state.filters.price) {
+        const [min, max] = state.filters.price.split('-').map(p => parseInt(p));
+        filtered = filtered.filter(item => {
+            if (!item.price) return false;
+            return item.price >= min && item.price <= max;
+        });
+    }
+    
+    // Apply sort
+    if (state.filters.sort) {
+        const [field, order] = state.filters.sort.split('-');
+        filtered.sort((a, b) => {
+            let valA, valB;
+            
+            if (field === 'rating') {
+                valA = a.rating || 0;
+                valB = b.rating || 0;
+            } else if (field === 'price') {
+                valA = a.price || 0;
+                valB = b.price || 0;
+            } else if (field === 'name') {
+                valA = (a.name.vi || '').toLowerCase();
+                valB = (b.name.vi || '').toLowerCase();
+                return order === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+            }
+            
+            return order === 'asc' ? valA - valB : valB - valA;
+        });
+    }
+    
+    state.filteredData = filtered;
+    updateActiveFilterTags();
+    renderContent();
+}
+
+// Update active filter tags
+function updateActiveFilterTags() {
+    if (!elements.activeFilters) return;
+    
+    const tags = [];
+    
+    // Sort tag
+    if (state.filters.sort) {
+        const sortText = {
+            'rating-desc': 'Đánh giá cao',
+            'rating-asc': 'Đánh giá thấp',
+            'price-asc': 'Giá thấp → cao',
+            'price-desc': 'Giá cao → thấp',
+            'name-asc': 'Tên A → Z',
+            'name-desc': 'Tên Z → A'
+        };
+        tags.push(`<span class="filter-tag">
+            <i class="fas fa-sort"></i> ${sortText[state.filters.sort]}
+            <i class="fas fa-times" onclick="removeFilter('sort')"></i>
+        </span>`);
+    }
+    
+    // Rating tag
+    if (state.filters.rating) {
+        const ratingText = state.filters.rating === '5' ? '5 sao' : `${state.filters.rating}+ sao`;
+        tags.push(`<span class="filter-tag">
+            <i class="fas fa-star"></i> ${ratingText}
+            <i class="fas fa-times" onclick="removeFilter('rating')"></i>
+        </span>`);
+    }
+    
+    // Price tag
+    if (state.filters.price) {
+        const [min, max] = state.filters.price.split('-');
+        const minM = parseInt(min) / 1000000;
+        const maxM = parseInt(max) / 1000000;
+        const priceText = maxM > 900 ? `> ${minM.toFixed(1)}tr` : `${minM.toFixed(1)} - ${maxM.toFixed(1)}tr`;
+        tags.push(`<span class="filter-tag">
+            <i class="fas fa-tag"></i> ${priceText}
+            <i class="fas fa-times" onclick="removeFilter('price')"></i>
+        </span>`);
+    }
+    
+    elements.activeFilters.innerHTML = tags.join('');
+}
+
+// Remove single filter
+function removeFilter(filterType) {
+    state.filters[filterType] = '';
+    
+    if (filterType === 'sort' && elements.sortFilter) {
+        elements.sortFilter.value = '';
+    } else if (filterType === 'rating' && elements.ratingFilter) {
+        elements.ratingFilter.value = '';
+    } else if (filterType === 'price' && elements.priceFilter) {
+        elements.priceFilter.value = '';
+    }
+    
+    applyFiltersAndSort();
+}
+
+// Clear all filters
+function clearAllFilters() {
+    state.filters.sort = '';
+    state.filters.rating = '';
+    state.filters.price = '';
+    
+    if (elements.sortFilter) elements.sortFilter.value = '';
+    if (elements.ratingFilter) elements.ratingFilter.value = '';
+    if (elements.priceFilter) elements.priceFilter.value = '';
+    
+    loadCategory(state.currentCategory);
+}
+
+// Clear search
+function clearSearch() {
+    if (elements.searchInput) {
+        elements.searchInput.value = '';
+        elements.searchClearBtn.style.display = 'none';
+        handleSearch({ target: elements.searchInput });
+    }
+}
+
 // ===== Event Listeners =====
 function setupEventListeners() {
+    // Filter toggle
+    if (elements.filterToggleBtn) {
+        elements.filterToggleBtn.addEventListener('click', toggleFilterCollapse);
+    }
+    
+    // Sort filter
+    if (elements.sortFilter) {
+        elements.sortFilter.addEventListener('change', (e) => {
+            state.filters.sort = e.target.value;
+            applyFiltersAndSort();
+        });
+    }
+    
+    // Rating filter
+    if (elements.ratingFilter) {
+        elements.ratingFilter.addEventListener('change', (e) => {
+            state.filters.rating = e.target.value;
+            applyFiltersAndSort();
+        });
+    }
+    
+    // Price filter
+    if (elements.priceFilter) {
+        elements.priceFilter.addEventListener('change', (e) => {
+            state.filters.price = e.target.value;
+            applyFiltersAndSort();
+        });
+    }
+    
+    // Clear filters
+    if (elements.clearFilters) {
+        elements.clearFilters.addEventListener('click', clearAllFilters);
+    }
+    
+    // Search clear button
+    if (elements.searchClearBtn) {
+        elements.searchClearBtn.addEventListener('click', clearSearch);
+    }
+    
+    // Search input - show/hide clear button
+    if (elements.searchInput) {
+        elements.searchInput.addEventListener('input', (e) => {
+            if (elements.searchClearBtn) {
+                elements.searchClearBtn.style.display = e.target.value ? 'flex' : 'none';
+            }
+        });
+    }
+
+    // Filter event listeners
+    if (elements.ratingFilter) {
+        elements.ratingFilter.addEventListener('change', (e) => {
+            state.filters.rating = e.target.value;
+            applyFilters();
+        });
+    }
+    
+    if (elements.priceFilter) {
+        elements.priceFilter.addEventListener('change', (e) => {
+            state.filters.price = e.target.value;
+            applyFilters();
+        });
+    }
+    
+    if (elements.clearFilters) {
+        elements.clearFilters.addEventListener('click', clearFilters);
+    }
+
     // Navigation items click
     elements.navItems.forEach(item => {
         item.addEventListener('click', (e) => {
@@ -290,7 +565,22 @@ function loadCategory(category) {
     elements.panelTitle.textContent = categoryTitles[state.currentLanguage][category] || category;
 
     // Clear search
-    elements.searchInput.value = '';
+    if (elements.searchInput) elements.searchInput.value = '';
+    if (elements.searchClearBtn) elements.searchClearBtn.style.display = 'none';
+    
+    // Reset filters
+    state.filters.sort = '';
+    state.filters.rating = '';
+    state.filters.price = '';
+    if (elements.sortFilter) elements.sortFilter.value = '';
+    if (elements.ratingFilter) elements.ratingFilter.value = '';
+    if (elements.priceFilter) elements.priceFilter.value = '';
+    
+    // Toggle filter section visibility
+    toggleFilterSection();
+    
+    // Clear active filter tags
+    if (elements.activeFilters) elements.activeFilters.innerHTML = '';
 
     // Render content
     renderContent();
@@ -329,26 +619,24 @@ function createCard(item) {
         <div class="content-card" data-id="${item.id}">
             <div class="card-image">
                 ${item.image ?
-            `<img src="${item.image}" alt="${title}" onerror="this.parentElement.innerHTML='<span class=\\'card-placeholder\\'><i class=\\"fas fa-camera\\"></i></span>'">` :
+            `<img src="${item.image}" alt="${title}" onerror="this.parentElement.innerHTML='<span class=\'card-placeholder\'><i class=\"fas fa-camera\"></i></span>'">` :
             `<span class="card-placeholder"><i class="fas fa-camera"></i></span>`
         }
             </div>
             <div class="card-content">
-                <h3 class="card-title">${title}</h3>
+                <div class="card-header">
+                    <h3 class="card-title">${title}</h3>
+                    ${rating ? `
+                        <div class="card-rating">
+                            <i class="fas fa-star"></i>
+                            <span>${rating.toFixed(1)}</span>
+                        </div>
+                    ` : ''}
+                </div>
                 <div class="card-description">
                     <span class="card-description-text">${description}</span><span class="read-more" style="display: none;"></span>
                 </div>
-                ${rating || price ? `
-                    <div class="card-footer">
-                        ${rating ? `
-                            <div class="card-rating">
-                                <span><i class="fas fa-star"></i></span>
-                                <span>${rating.toFixed(1)}</span>
-                            </div>
-                        ` : '<div></div>'}
-                        ${price ? `<div class="card-price">${price}</div>` : ''}
-                    </div>
-                ` : ''}
+                ${price ? `<div class="card-price">${price}</div>` : ''}
             </div>
         </div>
     `;
@@ -783,20 +1071,20 @@ function toggleActionButtons() {
     const arrowLeftIcon = toggleButtonsBtn.querySelector('.fa-arrow-left');
     
     if (isHidden) {
-        // Hiện toàn bộ UI
+        // Show entire UI
         body.classList.remove('ui-hidden');
         
-        // Đổi icon sang mũi tên phải
+        // Change icon to right arrow
         if (arrowRightIcon) arrowRightIcon.style.display = 'block';
         if (arrowLeftIcon) arrowLeftIcon.style.display = 'none';
         
         // Update tooltip
         if (toggleButtonsBtn) toggleButtonsBtn.setAttribute('title', 'Ẩn toàn bộ UI');
     } else {
-        // Ẩn toàn bộ UI (trừ logo và nút toggle)
+        // Hide entire UI (except logo and toggle button)
         body.classList.add('ui-hidden');
         
-        // Đổi icon sang mũi tên trái
+        // Change icon to left arrow
         if (arrowRightIcon) arrowRightIcon.style.display = 'none';
         if (arrowLeftIcon) arrowLeftIcon.style.display = 'block';
         
@@ -810,6 +1098,8 @@ function toggleActionButtons() {
 document.addEventListener('DOMContentLoaded', init);
 
 // ===== Export for potential use in other modules =====
+window.removeFilter = removeFilter;
+
 window.VR360App = {
     state,
     loadCategory,
