@@ -476,10 +476,11 @@ function createCard(item) {
     return `
         <div class="content-card" data-id="${item.id}">
             <div class="card-image">
-                ${item.image ?
-            `<img src="${item.image}" alt="${title}" onerror="this.parentElement.innerHTML='<span class=\\'card-placeholder\\'><i class=\\"fas fa-camera\\"></i></span>'">` :
-            `<span class="card-placeholder"><i class="fas fa-camera"></i></span>`
-        }
+                ${item.image? 
+                    `<img src="${item.image}" alt="${title}" 
+                        onerror="this.parentElement.innerHTML=\`<span class='card-placeholder'><i class='fas fa-camera'></i></span>\`">`
+                    : `<span class="card-placeholder"><i class="fas fa-camera"></i></span>`
+                }
             </div>
             <div class="card-content">
                 <div class="card-header">
